@@ -345,21 +345,11 @@
     <div class="container">
         <!-- Carousel -->
         <div class="carousel-container">
-            <div class="carousel">
-                <div class="carousel-slide active">
-                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200" alt="Sala de espera moderna con sillas cómodas">
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=1200" alt="Consulta médica equipada con camilla y mobiliario profesional">
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://images.unsplash.com/photo-1519494140681-8b17d830a3ec?w=1200" alt="Recepción y sala de espera con señalización clara">
-                </div>
+            <div class="carousel" id="carousel">
+                <!-- Las imágenes se cargarán dinámicamente desde las imágenes subidas -->
             </div>
-            <div class="carousel-controls">
-                <span class="carousel-dot active" data-slide="0"></span>
-                <span class="carousel-dot" data-slide="1"></span>
-                <span class="carousel-dot" data-slide="2"></span>
+            <div class="carousel-controls" id="carouselControls">
+                <!-- Los puntos se generarán dinámicamente -->
             </div>
         </div>
 
@@ -431,12 +421,72 @@
     </footer>
 
     <script>
+        // Load images from uploaded files
+        async function loadImages() {
+            const imageFiles = [
+                'image (6).jpg',  // Sala de espera 2
+                'image (7).jpg',  // Consulta médica
+                'image (8).jpg'   // Sala de espera 1
+            ];
+
+            const carousel = document.getElementById('carousel');
+            const controlsContainer = document.getElementById('carouselControls');
+            
+            const altTexts = [
+                'Sala de espera 2 - Instalaciones modernas y cómodas',
+                'Consulta médica equipada con camilla y mobiliario profesional',
+                'Sala de espera 1 - Recepción con señalización clara'
+            ];
+
+            for (let i = 0; i < imageFiles.length; i++) {
+                try {
+                    const uint8Array = await window.fs.readFile(imageFiles[i]);
+                    const blob = new Blob([uint8Array], { type: 'image/jpeg' });
+                    const imageUrl = URL.createObjectURL(blob);
+
+                    const slideDiv = document.createElement('div');
+                    slideDiv.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+                    
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = altTexts[i];
+                    
+                    slideDiv.appendChild(img);
+                    carousel.appendChild(slideDiv);
+
+                    const dot = document.createElement('span');
+                    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                    dot.setAttribute('data-slide', i);
+                    controlsContainer.appendChild(dot);
+
+                } catch (error) {
+                    console.error('Error loading image:', imageFiles[i], error);
+                }
+            }
+
+            initCarousel();
+        }
+
         // Carousel functionality
         let currentSlide = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const dots = document.querySelectorAll('.carousel-dot');
+        let slides, dots;
+
+        function initCarousel() {
+            slides = document.querySelectorAll('.carousel-slide');
+            dots = document.querySelectorAll('.carousel-dot');
+
+            // Dot click handlers
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => showSlide(index));
+            });
+
+            // Auto advance carousel
+            setInterval(nextSlide, 4000);
+        }
 
         function showSlide(n) {
+            if (!slides || slides.length === 0) return;
+            
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
             
@@ -450,13 +500,8 @@
             showSlide(currentSlide + 1);
         }
 
-        // Auto advance carousel
-        setInterval(nextSlide, 4000);
-
-        // Dot click handlers
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => showSlide(index));
-        });
+        // Load images when page loads
+        loadImages();
     </script>
 </body>
 </html>
