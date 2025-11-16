@@ -81,6 +81,46 @@
             padding: 3rem 1.5rem;
         }
 
+        /* Upload Section */
+        .upload-section {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 2px dashed var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .upload-section.hidden {
+            display: none;
+        }
+
+        .upload-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .upload-btn {
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .upload-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
         /* Carousel */
         .carousel-container {
             position: relative;
@@ -90,12 +130,16 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            background: var(--bg-light);
         }
 
         .carousel {
             position: relative;
             width: 100%;
-            height: 500px;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .carousel-slide {
@@ -141,6 +185,12 @@
         .carousel-dot.active {
             background: var(--white);
             transform: scale(1.2);
+        }
+
+        .no-images-message {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--text-light);
         }
 
         /* Features */
@@ -250,6 +300,7 @@
             font-weight: 700;
             margin: 1rem 0;
             display: block;
+            text-decoration: none;
         }
 
         .phone-number:hover {
@@ -285,7 +336,7 @@
             }
 
             .carousel {
-                height: 400px;
+                min-height: 400px;
             }
 
             .features {
@@ -311,7 +362,6 @@
             }
         }
 
-        /* Extra small screens */
         @media (max-width: 480px) {
             header {
                 padding: 1.5rem 1rem;
@@ -322,7 +372,7 @@
             }
 
             .carousel {
-                height: 300px;
+                min-height: 300px;
             }
 
             .feature-card {
@@ -343,14 +393,24 @@
     </div>
 
     <div class="container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h3>📸 Sube las fotos de tus instalaciones</h3>
+            <p style="color: var(--text-light); margin-bottom: 1rem;">Selecciona hasta 3 imágenes para mostrar en el carrusel</p>
+            <input type="file" id="fileInput" accept="image/*" multiple>
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                Seleccionar Fotos
+            </button>
+        </div>
+
         <!-- Carousel -->
         <div class="carousel-container">
             <div class="carousel" id="carousel">
-                <!-- Las imágenes se cargarán dinámicamente desde las imágenes subidas -->
+                <div class="no-images-message">
+                    <p style="font-size: 1.2rem;">Por favor, sube las fotos de tus instalaciones usando el botón de arriba</p>
+                </div>
             </div>
-            <div class="carousel-controls" id="carouselControls">
-                <!-- Los puntos se generarán dinámicamente -->
-            </div>
+            <div class="carousel-controls" id="carouselControls"></div>
         </div>
 
         <!-- Features -->
@@ -421,71 +481,64 @@
     </footer>
 
     <script>
-        // Load images from uploaded files
-        async function loadImages() {
-            const imageFiles = [
-                'image.jpg',      // Sala de espera 2
-                'image (1).jpg',  // Consulta médica
-                'image (2).jpg'   // Sala de espera 1
-            ];
+        let uploadedImages = [];
+        let currentSlide = 0;
+        let carouselInterval;
 
+        // Handle file upload
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files).slice(0, 3); // Max 3 images
+            
+            if (files.length === 0) return;
+
+            // Hide upload section
+            document.querySelector('.upload-section').classList.add('hidden');
+
+            uploadedImages = [];
             const carousel = document.getElementById('carousel');
             const controlsContainer = document.getElementById('carouselControls');
             
-            const altTexts = [
-                'Sala de espera 2 - Instalaciones modernas y cómodas',
-                'Consulta médica equipada con camilla y mobiliario profesional',
-                'Sala de espera 1 - Recepción con señalización clara'
-            ];
+            // Clear existing content
+            carousel.innerHTML = '';
+            controlsContainer.innerHTML = '';
 
-            for (let i = 0; i < imageFiles.length; i++) {
-                try {
-                    const uint8Array = await window.fs.readFile(imageFiles[i]);
-                    const blob = new Blob([uint8Array], { type: 'image/jpeg' });
-                    const imageUrl = URL.createObjectURL(blob);
-
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    uploadedImages.push(event.target.result);
+                    
                     const slideDiv = document.createElement('div');
-                    slideDiv.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+                    slideDiv.className = 'carousel-slide' + (index === 0 ? ' active' : '');
                     
                     const img = document.createElement('img');
-                    img.src = imageUrl;
-                    img.alt = altTexts[i];
+                    img.src = event.target.result;
+                    img.alt = `Instalación ${index + 1}`;
                     
                     slideDiv.appendChild(img);
                     carousel.appendChild(slideDiv);
 
                     const dot = document.createElement('span');
-                    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-                    dot.setAttribute('data-slide', i);
+                    dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+                    dot.setAttribute('data-slide', index);
+                    dot.addEventListener('click', () => showSlide(index));
                     controlsContainer.appendChild(dot);
 
-                } catch (error) {
-                    console.error('Error loading image:', imageFiles[i], error);
-                }
-            }
-
-            initCarousel();
-        }
-
-        // Carousel functionality
-        let currentSlide = 0;
-        let slides, dots;
-
-        function initCarousel() {
-            slides = document.querySelectorAll('.carousel-slide');
-            dots = document.querySelectorAll('.carousel-dot');
-
-            // Dot click handlers
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => showSlide(index));
+                    // Start carousel after first image loads
+                    if (index === 0) {
+                        startCarousel();
+                    }
+                };
+                
+                reader.readAsDataURL(file);
             });
-
-            // Auto advance carousel
-            setInterval(nextSlide, 4000);
-        }
+        });
 
         function showSlide(n) {
-            if (!slides || slides.length === 0) return;
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            if (slides.length === 0) return;
             
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
@@ -500,8 +553,12 @@
             showSlide(currentSlide + 1);
         }
 
-        // Load images when page loads
-        loadImages();
+        function startCarousel() {
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+            }
+            carouselInterval = setInterval(nextSlide, 4000);
+        }
     </script>
 </body>
 </html>
