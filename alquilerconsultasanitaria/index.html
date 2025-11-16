@@ -485,53 +485,88 @@
         let currentSlide = 0;
         let carouselInterval;
 
-        // Handle file upload
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const files = Array.from(e.target.files).slice(0, 3); // Max 3 images
-            
-            if (files.length === 0) return;
+        // Load saved images on page load
+        async function loadSavedImages() {
+            try {
+                const result = await window.storage.get('carousel-images');
+                if (result && result.value) {
+                    const images = JSON.parse(result.value);
+                    if (images && images.length > 0) {
+                        // Hide upload section
+                        document.querySelector('.upload-section').classList.add('hidden');
+                        
+                        // Display saved images
+                        displayImages(images);
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log('No hay imágenes guardadas');
+            }
+            return false;
+        }
 
-            // Hide upload section
-            document.querySelector('.upload-section').classList.add('hidden');
-
-            uploadedImages = [];
+        // Display images in carousel
+        function displayImages(images) {
             const carousel = document.getElementById('carousel');
             const controlsContainer = document.getElementById('carouselControls');
             
-            // Clear existing content
             carousel.innerHTML = '';
             controlsContainer.innerHTML = '';
-
-            files.forEach((file, index) => {
-                const reader = new FileReader();
+            
+            images.forEach((imageSrc, index) => {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = 'carousel-slide' + (index === 0 ? ' active' : '');
                 
-                reader.onload = function(event) {
-                    uploadedImages.push(event.target.result);
-                    
-                    const slideDiv = document.createElement('div');
-                    slideDiv.className = 'carousel-slide' + (index === 0 ? ' active' : '');
-                    
-                    const img = document.createElement('img');
-                    img.src = event.target.result;
-                    img.alt = `Instalación ${index + 1}`;
-                    
-                    slideDiv.appendChild(img);
-                    carousel.appendChild(slideDiv);
-
-                    const dot = document.createElement('span');
-                    dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
-                    dot.setAttribute('data-slide', index);
-                    dot.addEventListener('click', () => showSlide(index));
-                    controlsContainer.appendChild(dot);
-
-                    // Start carousel after first image loads
-                    if (index === 0) {
-                        startCarousel();
-                    }
-                };
+                const img = document.createElement('img');
+                img.src = imageSrc;
+                img.alt = `Instalación ${index + 1}`;
                 
-                reader.readAsDataURL(file);
+                slideDiv.appendChild(img);
+                carousel.appendChild(slideDiv);
+
+                const dot = document.createElement('span');
+                dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+                dot.setAttribute('data-slide', index);
+                dot.addEventListener('click', () => showSlide(index));
+                controlsContainer.appendChild(dot);
             });
+            
+            startCarousel();
+        }
+
+        // Handle file upload
+        document.getElementById('fileInput').addEventListener('change', async function(e) {
+            const files = Array.from(e.target.files).slice(0, 3);
+            
+            if (files.length === 0) return;
+
+            uploadedImages = [];
+            
+            // Process all files
+            const promises = files.map(file => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => resolve(event.target.result);
+                    reader.readAsDataURL(file);
+                });
+            });
+            
+            uploadedImages = await Promise.all(promises);
+            
+            // Save images to storage
+            try {
+                await window.storage.set('carousel-images', JSON.stringify(uploadedImages));
+                console.log('Imágenes guardadas correctamente');
+            } catch (error) {
+                console.error('Error al guardar imágenes:', error);
+            }
+            
+            // Hide upload section
+            document.querySelector('.upload-section').classList.add('hidden');
+            
+            // Display images
+            displayImages(uploadedImages);
         });
 
         function showSlide(n) {
@@ -559,6 +594,9 @@
             }
             carouselInterval = setInterval(nextSlide, 4000);
         }
+
+        // Load images when page loads
+        loadSavedImages();
     </script>
 </body>
 </html>
