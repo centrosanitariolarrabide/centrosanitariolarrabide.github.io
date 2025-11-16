@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Alquila tu consulta médica desde 180€/mes en centro sanitario con habilitación sociosanitaria. Despachos equipados para profesionales de la salud en Pamplona, Navarra.">
+    <meta name="description" content="Alquila tu consulta médica desde 180€/mes en centro sanitario con habilitación sociosanitaria. Despachos equipados para profesionales de la salud en Pamplona.">
     <meta name="keywords" content="alquiler consulta médica, despacho sanitario, habilitación sociosanitaria, consulta médica Pamplona, alquiler centro médico, consulta profesionales salud">
     <meta name="author" content="Centro Médico Alquiler Consultas">
     <meta property="og:title" content="Alquiler de Consulta Sanitaria con Habilitación Sociosanitaria">
@@ -24,7 +24,7 @@
             --white: #ffffff;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-dark); line-height: 1.6; background-color: var(--white); }
-        header { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.08); }
         h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
         .subtitle { font-size: 1.3rem; opacity: 0.95; font-weight: 400; }
         .price-banner { background: var(--accent-color); color: var(--white); padding: 2rem 1.5rem; text-align: center; font-size: 2rem; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
@@ -34,7 +34,7 @@
         .carousel { position: relative; width: 100%; min-height: 500px; display: flex; align-items: center; justify-content: center; }
         .carousel-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease-in-out; }
         .carousel-slide.active { opacity: 1; }
-        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .carousel-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 10; }
         .carousel-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.5); border: 2px solid var(--white); cursor: pointer; transition: all 0.3s; }
         .carousel-dot.active { background: var(--white); transform: scale(1.2); }
@@ -78,8 +78,8 @@
 </head>
 <body>
     <header>
-        <h1>CENTRO SANITARIO LARRABIDE</h1> </h1>Alquiler de Consulta Sanitaria</h1>
-        <p class="subtitle">Con Habilitación Sociosanitaria</p>
+        <h1>CENTRO SANITARIO LARRABIDE</h1>
+        <p class="subtitle">Alquiler de Consulta Sanitaria — Con Habilitación Sociosanitaria</p>
     </header>
 
     <div class="price-banner">
@@ -90,22 +90,8 @@
     <div class="container">
         <!-- Carousel -->
         <div class="carousel-container">
-            <div class="carousel" id="carousel">
-                <div class="carousel-slide active">
-                    <img src="./sala1.jpeg" alt="Sala de espera - Instalaciones modernas y cómodas" onerror="this.onerror=null; this.src='https://via.placeholder.com/1200x500/2563eb/ffffff?text=Sala+de+Espera+1';">
-                </div>
-                <div class="carousel-slide">
-                    <img src="./consulta1.jpeg" alt="Consulta médica equipada con camilla y mobiliario profesional" onerror="this.onerror=null; this.src='https://via.placeholder.com/1200x500/2563eb/ffffff?text=Consulta+Medica';">
-                </div>
-                <div class="carousel-slide">
-                    <img src="./sala2.jpeg" alt="Sala de espera - Recepción con señalización clara" onerror="this.onerror=null; this.src='https://via.placeholder.com/1200x500/2563eb/ffffff?text=Sala+de+Espera+2';">
-                </div>
-            </div>
-            <div class="carousel-controls" id="carouselControls">
-                <span class="carousel-dot active" data-slide="0"></span>
-                <span class="carousel-dot" data-slide="1"></span>
-                <span class="carousel-dot" data-slide="2"></span>
-            </div>
+            <div class="carousel" id="carousel" aria-live="polite"></div>
+            <div class="carousel-controls" id="carouselControls" role="tablist" aria-label="Controles del carrusel"></div>
         </div>
 
         <!-- Features -->
@@ -176,21 +162,82 @@
     </footer>
 
     <script>
+        // Lista de imágenes existentes en la carpeta (detectadas en el repo)
+        const images = [
+            "sala1.jpeg",
+            "sala2.jpeg",
+            "salaespera2.jpeg",
+            "salaespera3.jpeg",
+            "consulta1.jpeg","consulta2.jpeg","consulta3.jpeg","consulta4.jpeg","consulta5.jpeg","consulta6.jpeg","consulta7.jpeg","consulta8.jpeg","consulta9.jpeg","consulta10.jpeg","consulta11.jpeg","consulta12.jpeg","consulta13.jpeg",
+            "detalle.jpeg",
+            "detallecamilla.jpeg",
+            "pasillo.jpeg","pasillo2.jpeg","pasillo3.jpeg","pasillo4.jpeg"
+        ];
+
+        const carousel = document.getElementById('carousel');
+        const controls = document.getElementById('carouselControls');
+
+        // Helper para generar texto alt legible a partir del nombre del archivo
+        function altFromFilename(name) {
+            return name.replace(/[-_\.]/g, ' ').replace(/\bjpeg\b|\bjpg\b/gi, '').replace(/\d+/g, '').trim() || 'Imagen';
+        }
+
+        // Crear slides y controles basados en la lista de imágenes
+        images.forEach((file, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide' + (index === 0 ? ' active' : '');
+            slide.setAttribute('role','group');
+            slide.setAttribute('aria-roledescription','slide');
+            slide.setAttribute('aria-label', `${index+1} de ${images.length}`);
+
+            const img = document.createElement('img');
+            img.src = './' + file;
+            img.alt = altFromFilename(file);
+            img.loading = 'lazy';
+            img.onerror = function() {
+                this.onerror = null;
+                this.src = 'https://via.placeholder.com/1200x500/2563eb/ffffff?text=Imagen+no+disponible';
+            };
+
+            slide.appendChild(img);
+            carousel.appendChild(slide);
+
+            const dot = document.createElement('span');
+            dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+            dot.dataset.slide = index;
+            dot.setAttribute('role','tab');
+            dot.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+            dot.setAttribute('aria-label', `Ir a la imagen ${index + 1}`);
+            controls.appendChild(dot);
+
+            dot.addEventListener('click', () => showSlide(index));
+        });
+
         let currentSlide = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const dots = document.querySelectorAll('.carousel-dot');
+        const slides = () => document.querySelectorAll('.carousel-slide');
+        const dots = () => document.querySelectorAll('.carousel-dot');
 
         function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            currentSlide = (n + slides.length) % slides.length;
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
+            const s = slides();
+            const d = dots();
+            if (s.length === 0) return;
+            s.forEach(slide => slide.classList.remove('active'));
+            d.forEach(dot => {
+                dot.classList.remove('active');
+                dot.setAttribute('aria-selected','false');
+            });
+            currentSlide = (n + s.length) % s.length;
+            s[currentSlide].classList.add('active');
+            d[currentSlide].classList.add('active');
+            d[currentSlide].setAttribute('aria-selected','true');
         }
 
         function nextSlide() { showSlide(currentSlide + 1); }
-        setInterval(nextSlide, 4000);
-        dots.forEach((dot, index) => { dot.addEventListener('click', () => showSlide(index)); });
+        let autoplayInterval = setInterval(nextSlide, 4000);
+
+        // Pausar autoplay al pasar el ratón y reanudar al salir (mejor experiencia en desktop)
+        carousel.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        carousel.addEventListener('mouseleave', () => autoplayInterval = setInterval(nextSlide, 4000));
     </script>
 </body>
 </html>
