@@ -1,27 +1,120 @@
 <!DOCTYPE html>
-<html lang="es-ES">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquiler de Consultas Médicas y Sociosanitarias en Pamplona | Centro Sanitario Larrabide</title>
 
     <!-- SEO -->
-    <title>Alquiler de Consultas Médicas en Pamplona | Habilitación Sanitaria | Desde 180€/mes</title>
-
-    <meta name="description" content="Alquiler de consultas médicas y sociosanitarias en Pamplona (Navarra). Espacios habilitados, totalmente equipados y listos para profesionales sanitarios. Desde 180€/mes.">
-    <meta name="keywords" content="alquiler consulta médica pamplona, consultas sanitarias navarra, alquiler consulta sanitaria pamplona, despacho médico alquiler, centro sanitario pamplona, alquiler consultas salud pamplona, habilitación sociosanitaria navarra">
+    <meta name="description" content="Alquiler de consultas médicas, sanitarias y sociosanitarias en Pamplona (Navarra). Espacios totalmente equipados por horas, mañanas, tardes o día completo. Ubicación excelente junto a Larrabide.">
+    <meta name="keywords" content="alquiler consulta médica pamplona, consulta sanitaria alquiler navarra, alquiler sala consulta pamplona, consultas sanitarias pamplona">
     <meta name="author" content="Centro Sanitario Larrabide">
 
-    <!-- Canonical -->
-    <link rel="canonical" href="https://alquilerconsultasanitaria.org/">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; }
+        header { background: #004a7c; padding: 20px; text-align: center; color: white; }
+        h1 { margin: 0; }
+        .container { max-width: 900px; margin: auto; padding: 20px; }
 
-    <!-- Hreflang -->
-    <link rel="alternate" hreflang="es" href="https://alquilerconsultasanitaria.org/">
+        .carousel { position: relative; width: 100%; overflow: hidden; border-radius: 10px; margin-bottom: 20px; }
+        .carousel-slide { display: none; }
+        .carousel-slide img { width: 100%; display: block; border-radius: 10px; }
 
-    <!-- OpenGraph (para que Facebook / WhatsApp / Instagram lo muestren bien) -->
-    <meta property="og:title" content="Alquiler de Consultas Médicas en Pamplona | Espacios Sanitarios desde 180€/mes">
-    <meta property="og:description" content="Consultas médicas equipadas con habilitación sanitaria en Pamplona. Alquiler flexible para profesionales sanitarios.">
-    <meta property="og:url" content="https://alquilerconsultasanitaria.org/">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://alquilerconsultasanitaria.org/img/consulta1.jpg">
+        .info-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-    <!-- Datos estructurad
+        footer {
+            background: #004a7c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Alquiler de Consultas Médicas y Sociosanitarias en Pamplona</h1>
+    <p>Centro Sanitario Larrabide - Navarra</p>
+</header>
+
+<div class="container">
+
+    <!-- CARRUSEL -->
+    <div class="carousel">
+        <div class="carousel-slide">
+            <img src="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/sala1.jpeg" 
+            alt="Sala de espera luminosa y cómoda en Pamplona">
+        </div>
+
+        <div class="carousel-slide">
+            <img src="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/consulta1.jpeg" 
+            alt="Consulta médica totalmente equipada disponible para alquiler">
+        </div>
+
+        <div class="carousel-slide">
+            <img src="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/sala2.jpeg" 
+            alt="Área sanitaria preparada para profesionales en Pamplona">
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h2>Consultas disponibles para profesionales sanitarios</h2>
+        <p>
+            Ofrecemos alquiler de consultas médicas, sanitarias y sociosanitarias en Pamplona (Navarra). 
+            Espacios equipados, modernos y adaptados a profesionales de la salud: psicólogos, médicos, nutricionistas, fisioterapeutas, logopedas, enfermería y más.
+        </p>
+
+        <h3>✔ Modalidades de alquiler</h3>
+        <ul>
+            <li>Por horas</li>
+            <li>Media jornada (mañana o tarde)</li>
+            <li>Jornada completa</li>
+            <li>Alquiler continuo mensual</li>
+        </ul>
+
+        <h3>✔ Incluye</h3>
+        <ul>
+            <li>Sala equipada con mobiliario sanitario</li>
+            <li>WiFi alta velocidad</li>
+            <li>Calefacción y climatización</li>
+            <li>Acceso adaptado</li>
+            <li>Ubicación excelente en Pamplona</li>
+        </ul>
+
+        <h3>📞 Contacto</h3>
+        <p>
+            Para información y reservas:<br>
+            <strong>Email:</strong> centrosanitariolarrabide@gmail.com<br>
+            <strong>Teléfono:</strong> 600 000 000
+        </p>
+    </div>
+</div>
+
+<footer>
+    Centro Sanitario Larrabide • Pamplona, Navarra
+</footer>
+
+<script>
+let slideIndex = 0;
+showSlides();
+
+function showSlides() {
+    let slides = document.getElementsByClassName("carousel-slide");
+    
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+    }
+
+    slideIndex++;
+    if (slideIndex > slides.length) { slideIndex = 1 }
+
+    slides[slideIndex - 1].style.display = "block";
+
+    setTimeo
