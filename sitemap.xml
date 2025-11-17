@@ -1,23 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://centrosanitariolarrabide.github.io/</loc>
-    <lastmod>2025-11-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/</loc>
-    <lastmod>2025-11-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- Añade aquí otras URLs importantes, por ejemplo:
-  <url>
-    <loc>https://centrosanitariolarrabide.github.io/contacto/</loc>
-    <lastmod>2025-11-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  -->
-</urlset>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO básico -->
+    <title>Alquiler de consultas sanitarias | Centro Sanitario Larrabide — desde 180€/mes</title>
+    <meta name="description" content="Alquiler de consultas sanitarias equipadas por horas o por meses en Centro Sanitario Larrabide. Consultas habilitadas, localización céntrica, flexibilidad para profesionales de la salud.">
+    <link rel="canonical" href="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Alquiler de consultas sanitarias | Centro Sanitario Larrabide">
+    <meta property="og:description" content="Consultas profesionales en alquiler desde 180€/mes. Salas equipadas, habilitación sociosanitaria y recepción.">
+    <meta property="og:url" content="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/">
+    <meta property="og:image" content="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/sala1.jpeg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alquiler de consultas sanitarias | Centro Sanitario Larrabide">
+    <meta name="twitter:description" content="Consultas profesionales en alquiler desde 180€/mes. Salas equipadas, habilitación sociosanitaria y recepción.">
+    <meta name="twitter:image" content="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/sala1.jpeg">
+
+    <!-- Structured data: LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Centro Sanitario Larrabide
