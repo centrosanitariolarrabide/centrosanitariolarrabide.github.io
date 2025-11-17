@@ -3,27 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- SEO básico -->
-    <title>Alquiler de consultas sanitarias | Centro Sanitario Larrabide — desde 180€/mes</title>
-    <meta name="description" content="Alquiler de consultas sanitarias equipadas por horas o por meses en Centro Sanitario Larrabide. Consultas habilitadas, localización céntrica, flexibilidad para profesionales de la salud.">
-    <link rel="canonical" href="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/">
-    <meta name="robots" content="index, follow">
-
-    <!-- Open Graph / Twitter -->
+    <meta name="description" content="Alquila tu consulta médica desde 180€/mes en centro sanitario con habilitación sociosanitaria. Despachos equipados para profesionales de la salud en Pamplona.">
+    <meta name="keywords" content="alquiler consulta médica, despacho sanitario, habilitación sociosanitaria, consulta médica Pamplona, alquiler centro médico, consulta profesionales salud">
+    <meta name="author" content="Centro Médico Alquiler Consultas">
+    <meta property="og:title" content="Alquiler de Consulta Sanitaria con Habilitación Sociosanitaria">
+    <meta property="og:description" content="Despachos médicos totalmente equipados desde 180€/mes. Habilitación sociosanitaria incluida.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Alquiler de consultas sanitarias | Centro Sanitario Larrabide">
-    <meta property="og:description" content="Consultas profesionales en alquiler desde 180€/mes. Salas equipadas, habilitación sociosanitaria y recepción.">
-    <meta property="og:url" content="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/">
-    <meta property="og:image" content="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/sala1.jpeg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Alquiler de consultas sanitarias | Centro Sanitario Larrabide">
-    <meta name="twitter:description" content="Consultas profesionales en alquiler desde 180€/mes. Salas equipadas, habilitación sociosanitaria y recepción.">
-    <meta name="twitter:image" content="https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/sala1.jpeg">
+    <meta property="og:url" content="https://alquilerconsultasanitaria.org/">
+    <title>Alquiler Consulta Médica con Habilitación Sociosanitaria | Desde 180€/mes</title>
 
-    <!-- Structured data: LocalBusiness -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Centro Sanitario Larrabide
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-dark); line-height: 1.6; background-color: var(--white); }
+        header { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.08); }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .subtitle { font-size: 1.3rem; opacity: 0.95; font-weight: 400; }
+        .price-banner { background: var(--accent-color); color: var(--white); padding: 2rem 1.5rem; text-align: center; font-size: 2rem; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .price-banner .price { font-size: 3rem; display: block; margin: 0.5rem 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+        .carousel-container { position: relative; width: 100%; max-width: 1000px; margin: 0 auto 3rem; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); background: var(--bg-light); }
+        .carousel { position: relative; width: 100%; min-height: 500px; display: flex; align-items: center; justify-content: center; }
+        .carousel-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease-in-out; }
+        .carousel-slide.active { opacity: 1; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .carousel-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 10; }
+        .carousel-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.5); border: 2px solid var(--white); cursor: pointer; transition: all 0.3s; }
+        .carousel-dot.active { background: var(--white); transform: scale(1.2); }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .feature-card { background: var(--bg-light); padding: 2rem; border-radius: 12px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid transparent; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15); border-color: var(--accent-color); }
+        .feature-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .feature-card h3 { color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.4rem; }
+        .feature-card p { color: var(--text-light); font-size: 1rem; }
+        .cta-section { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); padding: 3rem 2rem; border-radius: 12px; text-align: center; margin: 3rem 0; }
+        .cta-section h2 { font-size: 2.2rem; margin-bottom: 1.5rem; }
+        .cta-buttons { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+        .btn { padding: 1.2rem 2.5rem; font-size: 1.2rem; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; font-weight: 600; }
+        .btn-primary { background: var(--white); color: var(--primary-color); }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(255,255,255,0.3); }
+        .btn-secondary { background: transparent; color: var(--white); border: 2px solid var(--white); }
+        .btn-secondary:hover { background: var(--white); color: var(--primary-color); }
+        .contact-info { text-align: center; margin: 3rem 0; }
+        .phone-number { font-size: 2.5rem; color: var(--primary-color); font-weight: 700; margin: 1rem 0; display: block; text-decoration: none; }
+        .phone-number:hover { color: var(--secondary-color); }
+        footer { background: var(--text-dark); color: var(--white); text-align: center; padding: 2rem 1.5rem; margin-top: 4rem; }
+        @media (orientation: portrait) and (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .subtitle { font-size: 1.1rem; }
+            .price-banner { padding: 1.5rem 1rem; font-size: 1.5rem; }
+            .price-banner .price { font-size: 2.5rem; }
+            .carousel { min-height: 400px; }
+            .features { grid-template-columns: 1fr; }
+            .cta-section h2 { font-size: 1.8rem; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; }
+            .phone-number { font-size: 2rem; }
+        }
+        @media (max-width: 480px) {
+            header { padding: 1.5rem 1rem; }
+            h1 { font-size: 1.8rem; }
+            .carousel { min-height: 300px; }
+            .feature-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CENTRO SANITARIO LARRABIDE</h1>
+        <p class="subtitle">Alquiler de Consulta Sanitaria — Con Habilitación Sociosanitaria</p>
+    </header>
+
+    <div class="price-banner">
+        Alquila tu consulta
+        <span class="price">desde 180€/mes</span>
+    </div>
+
+    <div class="container">
+        <!-- Carousel -->
+        <div class="carousel-container">
+            <div class="carousel" id="carousel" aria-live="polite"></div>
+            <div class="carousel-controls" id="carouselControls" role="tablist" aria-label="Controles del carrusel"></div>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🏥</div>
+                <h3>Habilitación Sociosanitaria</h3>
+                <p>Centro totalmente habilitado y con todas las licencias necesarias para tu actividad sanitaria</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>Totalmente Equipado</h3>
+                <p>Consultas completamente equipadas con mobiliario profesional y todo lo necesario para trabajar</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Excelente Ubicación</h3>
+                <p>Centro médico en zona accesible con buenas comunicaciones y aparcamiento disponible</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💼</div>
+                <h3>Flexible y Profesional</h3>
+                <p>Espacios adaptables a tus necesidades con ambiente profesional y sala de espera compartida</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Servicios Incluidos</h3>
+                <p>Climatización, limpieza, internet de alta velocidad y recepción compartida incluidos en el precio</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Disponibilidad Inmediata</h3>
+                <p>Empieza a trabajar desde el primer día sin obras ni esperas. Listo para usar</p>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>¿Listo para tu consulta?</h2>
+            <p style="font-size: 1.2rem; margin: 1rem 0;">Contacta ahora y reserva tu espacio profesional</p>
+            
+            <div class="cta-buttons">
+                <a href="tel:643856807" class="btn btn-primary">📞 Llamar Ahora</a>
+                <a href="https://alquilerconsultasanitaria.org/" target="_blank" class="btn btn-secondary">🌐 Más Información</a>
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+            <h2>Información y Reservas</h2>
+            <a href="tel:643856807" class="phone-number">643 85 68 07</a>
+            <p style="color: var(--text-light); font-size: 1.1rem; margin-top: 1rem;">
+                Horario: Lunes a Viernes de 9:00 a 20:00h
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Alquiler Consulta Sanitaria | Centro Médico con Habilitación Sociosanitaria</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">
+            <a href="https://alquilerconsultasanitaria.org/" style="color: var(--white); text-decoration: none;">alquilerconsultasanitaria.org</a>
+        </p>
+    </footer>
+
+    <script>
+        // Lista de imágenes existentes en la carpeta (detectadas en el repo)
+        const images = [
+            "sala1.jpeg",
+            "sala2.jpeg",
+            "salaespera2.jpeg",
+            "salaespera3.jpeg",
+            "consulta1.jpeg","consulta2.jpeg","consulta3.jpeg","consulta4.jpeg","consulta5.jpeg","consulta6.jpeg","consulta7.jpeg","consulta8.jpeg","consulta9.jpeg","consulta10.jpeg","consulta11.jpeg","consulta12.jpeg","consulta13.jpeg",
+            "detalle.jpeg",
+            "detallecamilla.jpeg",
+            "pasillo.jpeg","pasillo2.jpeg","pasillo3.jpeg","pasillo4.jpeg"
+        ];
+
+        const carousel = document.getElementById('carousel');
+        const controls = document.getElementById('carouselControls');
+
+        // Helper para generar texto alt legible a partir del nombre del archivo
+        function altFromFilename(name) {
+            return name.replace(/[-_\.]/g, ' ').replace(/\bjpeg\b|\bjpg\b/gi, '').replace(/\d+/g, '').trim() || 'Imagen';
+        }
+
+        // Crear slides y controles basados en la lista de imágenes
+        images.forEach((file, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide' + (index === 0 ? ' active' : '');
+            slide.setAttribute('role','group');
+            slide.setAttribute('aria-roledescription','slide');
+            slide.setAttribute('aria-label', `${index+1} de ${images.length}`);
+
+            const img = document.createElement('img');
+            img.src = './' + file;
+            img.alt = altFromFilename(file);
+            img.loading = 'lazy';
+            img.onerror = function() {
+                this.onerror = null;
+                this.src = 'https://via.placeholder.com/1200x500/2563eb/ffffff?text=Imagen+no+disponible';
+            };
+
+            slide.appendChild(img);
+            carousel.appendChild(slide);
+
+            const dot = document.createElement('span');
+            dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+            dot.dataset.slide = index;
+            dot.setAttribute('role','tab');
+            dot.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+            dot.setAttribute('aria-label', `Ir a la imagen ${index + 1}`);
+            controls.appendChild(dot);
+
+            dot.addEventListener('click', () => showSlide(index));
+        });
+
+        let currentSlide = 0;
+        const slides = () => document.querySelectorAll('.carousel-slide');
+        const dots = () => document.querySelectorAll('.carousel-dot');
+
+        function showSlide(n) {
+            const s = slides();
+            const d = dots();
+            if (s.length === 0) return;
+            s.forEach(slide => slide.classList.remove('active'));
+            d.forEach(dot => {
+                dot.classList.remove('active');
+                dot.setAttribute('aria-selected','false');
+            });
+            currentSlide = (n + s.length) % s.length;
+            s[currentSlide].classList.add('active');
+            d[currentSlide].classList.add('active');
+            d[currentSlide].setAttribute('aria-selected','true');
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        let autoplayInterval = setInterval(nextSlide, 4000);
+
+        // Pausar autoplay al pasar el ratón y reanudar al salir (mejor experiencia en desktop)
+        carousel.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        carousel.addEventListener('mouseleave', () => autoplayInterval = setInterval(nextSlide, 4000));
+    </script>
+</body>
+</html>
