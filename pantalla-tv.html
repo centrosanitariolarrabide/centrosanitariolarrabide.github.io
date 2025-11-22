@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Centro Sanitario Larrabide - Pantalla TV</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slide-enter {
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0; padding: 0;
+            background: linear-gradient(to bottom right,#2563eb,#1e40af);
+        }
+        @media (orientation: portrait) {
+            .slide-content { min-height: 100vh; }
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv';
+
+// Helper parse for both tab/comma export
+function parseCSV(csv) {
+    const lines = csv.trim().split('\n');
+    if (lines.length < 2) return [];
+    const isTab = lines[0].includes('\t');
+    const headers = lines[0].split(isTab ? '\t' : ',').map(h => h.trim());
+    const data = [];
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        const values = line.split(isTab ? '\t' : ',').map(v => v.trim());
+        let obj = {};
+        headers.forEach((header, idx) => obj[header] = values[idx] || '');
+        if (obj.numeroDespacho) data.push(obj);
+    }
+    return data.sort((a,b) => (parseInt(a.numeroDespacho)||0)-(parseInt(b.numeroDespacho)||0));
+}
+
+// Opcional: tiempo de transición en milisegundos
+const SLIDE_DURATION = 10000; // 10 segundos
+const PROFESIONALES_POR_SLIDE = 4;
+
+function PantallaTV() {
+    // Estado para profesionales
+    const [profesionales, setProfesionales] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    // Estado del slide
+    const [currentSlide, setCurrentSlide] = React.useState(0);
+    const [slideKey, setSlideKey] = React.useState(0);
+
+    // Anuncio: personaliza aquí tu texto!
+    const ANUNCIO = {
+        titulo: "¡Alquila tu despacho!",
+        subtitulo: "Consultas disponibles en el Centro Sanitario Larrabide.",
+        contenido: (
+            <>
+                <div className="text-2xl md:text-4xl font-bold mt-6 mb-4 flex flex-row items-center gap-3 text-blue-800 justify-center">
+                    Tef: <span className="underline ml-2">643 85 68 07</span>
+                </div>
+                <div className="text-lg md:text-2xl mb-6 font-semibold text-blue-700">
+                    Alquiler desde <span className="font-bold">180 euros</span>
+                </div>
+                <ul className="text-gray-600 text-xl md:text-2xl mb-6 list-disc mx-auto max-w-lg text-left pl-6">
+                    <li>Despachos equipados con todos los servicios</li>
+                    <li>WiFi, limpieza, recepción compartida</li>
+                    <li>Sala de espera y zona común</li>
+                </ul>
+            </>
+        )
+    };
+
+    // Cargar Google Sheets profesionales
+    React.useEffect(() => {
+        async function fetchProfs() {
+            setIsLoading(true);
+            try {
+                const resp = await fetch(GOOGLE_SHEET_URL);
+                if (resp.ok) {
+                    let txt = await resp.text();
+                    let datos = parseCSV(txt);
+                    setProfesionales(datos);
+                }
+            } catch {}
+            setIsLoading(false);
+        }
+        fetchProfs();
+        // Actualiza cada 10 minutos
+        const timer = setInterval(fetchProfs, 600000);
+        return () => clearInterval(timer);
+    }, []);
+
+    // Slides
+    const totalSlidesProfesionales = Math.ceil(profesionales.length/PROFESIONALES_POR_SLIDE);
+    const totalSlides = 1 + totalSlidesProfesionales; // 1 anuncio + profesionales
+
+    // Slide cambio automático
+    React.useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentSlide(prev => (prev+1)%totalSlides);
+            setSlideKey(prev => prev+1);
+        }, SLIDE_DURATION);
+        return ()=>clearInterval(timer);
+    }, [totalSlides, profesionales.length]);
+
+    let content;
+    if (currentSlide === 0) {
+        // Slide de anuncio
+        content = (
+            <div key={slideKey} className="slide-enter slide-content flex flex-col items-center justify-center min-h-[70vh]">
+                <div className="bg-white rounded-3xl shadow-2xl px-8 py-12 text-center max-w-2xl mx-auto border-t-8 border-blue-600">
+                    <h1 className="text-3xl md:text-6xl font-extrabold text-blue-900 mb-2 drop-shadow">Centro Sanitario Larrabide</h1>
+                    <h2 className="text-2xl md:text-3xl font-bold text-blue-800 mb-3">{ANUNCIO.titulo}</h2>
+                    <div className="text-xl md:text-2xl text-blue-700 mb-2">{ANUNCIO.subtitulo}</div>
+                    {ANUNCIO.contenido}
+                </div>
+            </div>
+        )
+    } else {
+        // Slide de profesionales (paginar!)
+        const profs = profesionales.slice((currentSlide-1)*PROFESIONALES_POR_SLIDE, currentSlide*PROFESIONALES_POR_SLIDE);
+        content = (
+            <div key={slideKey} className="slide-enter slide-content flex flex-col items-center justify-center min-h-[70vh]">
+                <div className="bg-white rounded-3xl shadow-2xl px-8 py-10 max-w-3xl w-full border-t-8 border-blue-600">
+                    <h2 className="text-blue-900 font-extrabold text-2xl md:text-4xl mb-6 text-center">Profesionales</h2>
+                    <div className="flex flex-col gap-6">
+                        {profs.map((prof,idx)=>(
+                            <div key={prof.numeroDespacho+"-"+prof.nombre}
+                                className="flex items-start gap-5 p-3 bg-blue-50 rounded-2xl shadow border border-blue-200"
+                            >
+                                <div className="bg-blue-600 text-white rounded-lg w-16 h-16 flex items-center justify-center text-3xl font-bold">
+                                    {prof.numeroDespacho}
+                                </div>
+                                <div className="flex-grow">
+                                    <div className="text-blue-900 font-bold text-lg mb-1">{prof.especialidad}</div>
+                                    <div className="font-semibold text-gray-800 text-lg">{prof.nombre}</div>
+                                    {prof.servicios &&
+                                        <div className="text-gray-600 text-md mt-1">{prof.servicios}</div>
+                                    }
+                                    <div className="mt-2 space-y-1 text-md">
+                                        {prof.web &&
+                                            <div className="text-blue-600 font-medium">
+                                                <a href={prof.web} target="_blank" rel="noopener noreferrer" className="underline">{prof.web}</a>
+                                            </div>
+                                        }
+                                        {prof.telefono &&
+                                            <div className="text-gray-800 font-bold">Cita previa Tlf: {prof.telefono}</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="min-h-screen w-full flex flex-col justify-center items-center">
+            {content}
+        </div>
+    );
+}
+
+ReactDOM.render(<PantallaTV />, document.getElementById('root'));
+
+</script>
+</body>
+</html>
