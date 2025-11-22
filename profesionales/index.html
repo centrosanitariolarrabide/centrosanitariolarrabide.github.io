@@ -22,8 +22,8 @@
             box-shadow: 0 4px 18px rgba(37,99,235,0.2);
             transform: translateY(-3px) scale(1.012);
         }
-        .prof-card-disponible {
-            border-color: #22c55e !important; /* Tailwind green-500 */
+        .anuncio-card {
+            border-color: #a21caf !important; /* Tailwind purple-700 */
         }
         @media (orientation: portrait) and (min-width: 1000px) {
             h1 {
@@ -46,7 +46,7 @@ const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzl
 function parseCSV(csv) {
     const lines = csv.trim().split('\n');
     if (lines.length < 2) return [];
-    // Detecta separator: tab o coma (según Google Sheet config)
+    // Detecta separator: tab o coma
     const isTab = lines[0].includes('\t');
     const headers = lines[0].split(isTab ? '\t' : ',').map(h => h.trim());
     const data = [];
@@ -57,7 +57,6 @@ function parseCSV(csv) {
         headers.forEach((header, idx) => obj[header] = values[idx] || '');
         if (obj.numeroDespacho) data.push(obj);
     }
-    // Ordena por numeroDespacho (número)
     return data.sort((a,b) => (parseInt(a.numeroDespacho)||0)-(parseInt(b.numeroDespacho)||0));
 }
 
@@ -84,25 +83,16 @@ function Profesionales() {
         return () => clearInterval(timer);
     }, []);
 
-    // Genera 20 despachos (1 a 20)
-    const despachos = [];
-    for (let i = 1; i <= 20; i++) {
-        // Busca si existe profesional para ese despacho
-        const prof = profesionales.find(p => parseInt(p.numeroDespacho,10) === i);
-        if (prof) {
-            despachos.push({ ...prof, disponible: false });
-        } else {
-            despachos.push({ 
-                numeroDespacho: i, 
-                disponible: true 
-            });
-        }
-    }
+    // Inserta una tarjeta anuncio en medio de los ocupados (aprox en mitad)
+    let cards = [...profesionales];
+    const anuncioData = { anuncio:true };
+    const mitad = Math.floor(cards.length / 2);
+    cards.splice(mitad, 0, anuncioData);
 
     // Divide en dos columnas balanceadas
-    const mitad = Math.ceil(despachos.length / 2);
-    const col1 = despachos.slice(0, mitad);
-    const col2 = despachos.slice(mitad);
+    const mitadCol = Math.ceil(cards.length / 2);
+    const col1 = cards.slice(0, mitadCol);
+    const col2 = cards.slice(mitadCol);
 
     return (
         <div className="min-h-screen flex flex-col items-center mx-auto max-w-6xl py-12 px-2 sm:px-8">
@@ -110,42 +100,48 @@ function Profesionales() {
                 Centro Sanitario Larrabide
             </h1>
             <div className="w-full flex flex-col md:flex-row gap-8 justify-center">
-                {/* Columnas */}
                 {[col1, col2].map((col, idx) => (
                     <div key={idx} className="flex-1 flex flex-col gap-5">
-                        {col.map((prof, ind) => (
-                            <div key={prof.numeroDespacho + "-" + (prof.nombre || "disponible")}
-                                className={`card prof-card bg-white rounded-2xl px-6 py-8 shadow-lg border-t-4 flex gap-4 items-center ${prof.disponible ? "prof-card-disponible border-green-500" : "border-blue-400"}`}
+                        {col.map((prof, ind) => prof.anuncio ? (
+                            <div key={'anuncio-'+ind}
+                                className="card prof-card anuncio-card bg-gradient-to-br from-purple-500 via-purple-700 to-blue-600 text-white rounded-2xl px-6 py-8 shadow-lg border-t-4 border-purple-700 flex gap-4 items-center"
                             >
-                                <div className={`rounded-lg w-16 h-16 flex items-center justify-center text-3xl font-bold flex-shrink-0 shadow-lg
-                                    ${prof.disponible ? "bg-green-500 text-white" : "bg-blue-600 text-white"}`}>
+                                <div className="rounded-lg w-16 h-16 flex items-center justify-center text-2xl font-extrabold flex-shrink-0 shadow-lg bg-white text-purple-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="38" width="38" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-9 14.13A1 1 0 0 0 5 19V21a1 1 0 0 0 1.45.89l2.61-1.47a1 1 0 0 1 .49-.13H14c.22 0 .44.04.64.12l2.67 1.52A1 1 0 0 0 19 21v-2a1 1 0 0 0 .83-.57A10 10 0 0 0 12 2zm5.92 12.38A1 1 0 0 0 17 15h-2v3h-6v-3H5a1 1 0 0 0-.92-.62a8 8 0 1 1 13.84 0z" /></svg>
+                                </div>
+                                <div className="flex-grow text-left py-2">
+                                    <div className="font-bold text-lg mb-2">Consultas disponibles</div>
+                                    <div className="text-white font-semibold mb-1">
+                                         Tef: <span className="underline">643 85 68 07</span>
+                                    </div>
+                                    <div className="text-white text-md">
+                                         Alquiler desde <span className="font-bold">180 euros</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div key={prof.numeroDespacho + "-" + (prof.nombre || "ocupado")}
+                                className="card prof-card bg-white rounded-2xl px-6 py-8 shadow-lg border-t-4 border-blue-400 flex gap-4 items-center"
+                            >
+                                <div className="bg-blue-600 text-white rounded-lg w-16 h-16 flex items-center justify-center text-3xl font-bold flex-shrink-0 shadow-lg">
                                     {prof.numeroDespacho}
                                 </div>
                                 <div className="flex-grow text-left">
-                                    {prof.disponible ? (
-                                        <div>
-                                            <div className="text-green-600 font-bold text-lg mb-1">Disponible</div>
-                                            <div className="text-gray-700">¿Buscas consulta nueva? <br/>Solicita información en recepción.</div>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            <div className="text-blue-900 font-bold text-lg mb-1">{prof.especialidad}</div>
-                                            <div className="font-semibold text-gray-800 text-md">{prof.nombre}</div>
-                                            {prof.servicios &&
-                                                <div className="text-gray-600 text-sm mt-1">{prof.servicios}</div>
-                                            }
-                                            <div className="mt-2 space-y-1 text-sm">
-                                                {prof.web &&
-                                                    <div className="text-blue-600 font-medium">
-                                                        <a href={prof.web} target="_blank" rel="noopener noreferrer" className="underline">{prof.web}</a>
-                                                    </div>
-                                                }
-                                                {prof.telefono &&
-                                                    <div className="text-gray-800 font-bold">Cita previa Tlf: {prof.telefono}</div>
-                                                }
+                                    <div className="text-blue-900 font-bold text-lg mb-1">{prof.especialidad}</div>
+                                    <div className="font-semibold text-gray-800 text-md">{prof.nombre}</div>
+                                    {prof.servicios &&
+                                        <div className="text-gray-600 text-sm mt-1">{prof.servicios}</div>
+                                    }
+                                    <div className="mt-2 space-y-1 text-sm">
+                                        {prof.web &&
+                                            <div className="text-blue-600 font-medium">
+                                                <a href={prof.web} target="_blank" rel="noopener noreferrer" className="underline">{prof.web}</a>
                                             </div>
-                                        </>
-                                    )}
+                                        }
+                                        {prof.telefono &&
+                                            <div className="text-gray-800 font-bold">Cita previa Tlf: {prof.telefono}</div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         ))}
