@@ -1,1 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro Sanitario Larrabide - Profesionales</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom right,#2563eb,#1e40af);
+        }
+        .card {
+            transition: box-shadow .25s, transform .25s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 18px rgba(37,99,235,0.2);
+            transform: translateY(-3px) scale(1.012);
+        }
+        .prof-card-disponible {
+            border-color: #22c55e !important; /* Tailwind green-500 */
+        }
+        @media (orientation: portrait) and (min-width: 1000px) {
+            h1 {
+                font-size: 3.2rem !important;
+            }
+            .prof-card {
+                font-size: 1.1rem;
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
 
+const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv';
+
+// Admite tanto tabs (\t) como comas si cambias el export
+function parseCSV(csv) {
+    const lines = csv.trim().split('\n');
+    if (lines.length < 2) return [];
+    // Detecta separator: tab o coma (según Google Sheet config)
+    const isTab = lines[0].includes('\t');
+    const headers = lines[0].split(isTab ? '\t' : ',').map(h => h.trim());
+    const data = [];
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        const values = line.split(isTab ? '\t' : ',').map(v => v.trim());
+        let obj = {};
+        headers.forEach((header, idx) => obj[header] = values[idx] || '');
+        if (obj.numeroDespacho) data.push(obj);
+    }
+    // Ordena por numeroDespacho (número)
+    return data.sort((a,b) => (parseInt(a.numeroDespacho)||0)-(parseInt(b.numeroDespacho)||0));
+}
+
+function Profesionales() {
+    const [profesionales, setProfesionales] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        async function fetchProfs() {
+            setIsLoading(true);
+            try {
+                const resp = await fetch(GOOGLE_SHEET_URL);
+                if (resp.ok) {
+                    let txt = await resp.text();
+                    let datos = parseCSV(txt);
+                    setProfesionales(datos);
+                }
+            } catch {}
+            setIsLoading(false);
+        }
+        fetchProfs();
+        // Actualiza cada 10 minutos
+        const timer = setInterval(fetchProfs, 600000);
+        return () => clearInterval(timer);
+    }, []);
+
+    // Genera 20 despachos (1 a 20)
+    const despachos = [];
+    for (let i = 1; i <= 20; i++) {
+        // Busca si existe profesional para ese despacho
+        const prof = profesionales.find(p => parseInt(p.numeroDespacho,10) === i);
+        if (prof) {
+            despachos.push({ ...prof, disponible: false });
+        } else {
+            despachos.push({ 
+                numeroDespacho: i, 
+                disponible: true 
+            });
+        }
+    }
+
+    // Divide en dos columnas balanceadas
+    const mitad = Math.ceil(despachos.length / 2);
+    const col1 = despachos.slice(0, mitad);
+    const col2 = despachos.slice(mitad);
+
+    return (
+        <div className="min-h-screen flex flex-col items-center mx-auto max-w-6xl py-12 px-2 sm:px-8">
+            <h1 className="text-white text-4xl md:text-6xl font-bold mb-8 pb-2 text-center drop-shadow-lg tracking-wide">
+                Centro Sanitario Larrabide
+            </h1>
+            <div className="w-full flex flex-col md:flex-row gap-8 justify-center">
+                {/* Columnas */}
+                {[col1, col2].map((col, idx) => (
+                    <div key={idx} className="flex-1 flex flex-col gap-5">
+                        {col.map((prof, ind) => (
+                            <div key={prof.numeroDespacho + "-" + (prof.nombre || "disponible")}
+                                className={`card prof-card bg-white rounded-2xl px-6 py-8 shadow-lg border-t-4 flex gap-4 items-center ${prof.disponible ? "prof-card-disponible border-green-500" : "border-blue-400"}`}
+                            >
+                                <div className={`rounded-lg w-16 h-16 flex items-center justify-center text-3xl font-bold flex-shrink-0 shadow-lg
+                                    ${prof.disponible ? "bg-green-500 text-white" : "bg-blue-600 text-white"}`}>
+                                    {prof.numeroDespacho}
+                                </div>
+                                <div className="flex-grow text-left">
+                                    {prof.disponible ? (
+                                        <div>
+                                            <div className="text-green-600 font-bold text-lg mb-1">Disponible</div>
+                                            <div className="text-gray-700">¿Buscas consulta nueva? <br/>Solicita información en recepción.</div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="text-blue-900 font-bold text-lg mb-1">{prof.especialidad}</div>
+                                            <div className="font-semibold text-gray-800 text-md">{prof.nombre}</div>
+                                            {prof.servicios &&
+                                                <div className="text-gray-600 text-sm mt-1">{prof.servicios}</div>
+                                            }
+                                            <div className="mt-2 space-y-1 text-sm">
+                                                {prof.web &&
+                                                    <div className="text-blue-600 font-medium">
+                                                        <a href={prof.web} target="_blank" rel="noopener noreferrer" className="underline">{prof.web}</a>
+                                                    </div>
+                                                }
+                                                {prof.telefono &&
+                                                    <div className="text-gray-800 font-bold">Cita previa Tlf: {prof.telefono}</div>
+                                                }
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ))}
+            </div>
+            {isLoading &&
+                <div className="text-white text-lg mt-7">Cargando profesionales...</div>
+            }
+        </div>
+    );
+}
+
+ReactDOM.render(<Profesionales />, document.getElementById('root'));
+
+</script>
+</body>
+</html>
