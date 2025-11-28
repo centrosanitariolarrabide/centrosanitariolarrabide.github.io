@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Alquila tu consulta médica desde 180€/mes en centro sanitario con habilitación sociosanitaria. Despachos equipados para profesionales de la salud en Pamplona.">
-    <meta name="keywords" content="alquiler consulta médica,alquiler consulta sanitaria, consulta sanitaria, habilitación sociosanitaria, consulta médica Pamplona, alquiler centro médico, consulta profesionales salud">
+    <meta name="description" content="Alquila tu consulta médica desde 180€/mes en centro sanitario con habilitación sociosanitaria. Despachos equipados para profesionales de la salud en Pamplona.[...]">
+    <meta name="keywords" content="alquiler consulta médica,alquiler consulta sanitaria, consulta sanitaria, habilitación sociosanitaria, consulta médica Pamplona, alquiler centro médico, consulta[...]">
     <meta name="author" content="Centro Médico Alquiler Consultas">
     <meta property="og:title" content="Alquiler de Consulta Sanitaria con Habilitación Sociosanitaria">
     <meta property="og:description" content="Despachos médicos totalmente equipados desde 180€/mes. Habilitación sociosanitaria incluida.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alquilerconsultasanitaria.org/">
     <meta property="og:image" content="https://alquilerconsultasanitaria.org/imagen-principal.jpg">
-<meta property="og:image:alt" content="Consulta sanitaria en Pamplona totalmente equipada para profesionales">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Consulta sanitaria en Pamplona totalmente equipada para profesionales">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <title>Alquiler de Consulta Sanitaria en Pamplona | Habilitación Sociosanitaria | Desde 180€</title>
 
     <style>
@@ -27,12 +27,13 @@
             --text-light: #64748b;
             --bg-light: #f8fafc;
             --white: #ffffff;
-            .visually-hidden {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+        }
+        .visually-hidden {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-dark); line-height: 1.6; background-color: var(--white); }
         header { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.08); }
@@ -67,6 +68,56 @@
         .phone-number { font-size: 2.5rem; color: var(--primary-color); font-weight: 700; margin: 1rem 0; display: block; text-decoration: none; }
         .phone-number:hover { color: var(--secondary-color); }
         footer { background: var(--text-dark); color: var(--white); text-align: center; padding: 2rem 1.5rem; margin-top: 4rem; }
+        /* --- Reglas para orientación vertical, tipo TV --- */
+        /* Si el alto es al menos 30% mayor que el ancho, adaptamos el diseño */
+        @media (min-aspect-ratio: 3/4) {
+            body, html {
+                min-height: 100vh;
+                height: 100vh;
+                width: 100vw;
+                overflow: auto;
+                background: var(--bg-light);
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+            .container {
+                min-height: 80vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 4vh 1vw;
+            }
+            .carousel-container {
+                min-height: 45vh;
+                max-width: 95vw;
+            }
+            .carousel {
+                min-height: 35vh;
+            }
+            .feature-card, .cta-section {
+                font-size: 2.2rem;
+                padding: 3rem 2rem;
+            }
+            h1, .subtitle, .price-banner, .cta-section h2, .phone-number {
+                font-size: 3rem !important;
+            }
+            .phone-number {
+                font-size: 3.5rem;
+            }
+            .features {
+                grid-template-columns: 1fr 1fr;
+                gap: 3vw;
+            }
+            .feature-icon {
+                font-size: 4rem;
+            }
+            footer {
+                font-size: 2rem;
+                padding: 3rem 2vw;
+            }
+        }
         @media (orientation: portrait) and (max-width: 768px) {
             h1 { font-size: 2rem; }
             .subtitle { font-size: 1.1rem; }
@@ -87,16 +138,16 @@
         }
     </style>
     <style>
-#screenSaverOverlay {
-    position: fixed;
-    inset: 0;
-    background: black;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transition: opacity 2s ease-in-out;
-}
-</style>
+    #screenSaverOverlay {
+        position: fixed;
+        inset: 0;
+        background: black;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 9999;
+        transition: opacity 2s ease-in-out;
+    }
+    </style>
 </head>
 <body>
     <header>
@@ -104,14 +155,14 @@
         <h1 class="subtitle">CENTRO SANITARIO LARRABIDE</h1>
     </header>
     <p class="visually-hidden">
-    Alquila tu consulta sanitaria en Pamplona en un centro totalmente habilitado. Espacios profesionales, equipados, con servicios incluidos y disponibilidad inmediata para médicos, psicólogos, fisioterapeutas y otros profesionales de la salud.
-</p>
+    Alquila tu consulta sanitaria en Pamplona en un centro totalmente habilitado. Espacios profesionales, equipados, con servicios incluidos y disponibilidad inmediata para médicos, psicólogos, fisi[...]
+    </p>
 
-<div class="price-banner">
-    Alquila tu consulta
-    <span class="price">desde 180€/mes</span>
-</div>
-    
+    <div class="price-banner">
+        Alquila tu consulta
+        <span class="price">desde 180€/mes</span>
+    </div>
+        
     <div class="container">
         <!-- Carousel -->
         <div class="carousel-container">
@@ -126,31 +177,26 @@
                 <h3>Habilitación Sociosanitaria</h3>
                 <p>Centro totalmente habilitado y con todas las licencias necesarias para tu actividad sanitaria</p>
             </div>
-
             <div class="feature-card">
                 <div class="feature-icon">✨</div>
                 <h3>Totalmente Equipado</h3>
                 <p>Consultas completamente equipadas con mobiliario profesional y todo lo necesario para trabajar</p>
             </div>
-
             <div class="feature-card">
                 <div class="feature-icon">📍</div>
                 <h3>Excelente Ubicación</h3>
                 <p>Centro médico en zona accesible con buenas comunicaciones y aparcamiento disponible</p>
             </div>
-
             <div class="feature-card">
                 <div class="feature-icon">💼</div>
                 <h3>Flexible y Profesional</h3>
                 <p>Espacios adaptables a tus necesidades con ambiente profesional y sala de espera compartida</p>
             </div>
-
             <div class="feature-card">
                 <div class="feature-icon">🔐</div>
                 <h3>Servicios Incluidos</h3>
                 <p>Climatización, limpieza, internet de alta velocidad y recepción compartida incluidos en el precio</p>
             </div>
-
             <div class="feature-card">
                 <div class="feature-icon">⚡</div>
                 <h3>Disponibilidad Inmediata</h3>
@@ -193,7 +239,7 @@
             "sala2.jpeg",
             "salaespera2.jpeg",
             "salaespera3.jpeg",
-            "consulta1.jpeg","consulta2.jpeg","consulta3.jpeg","consulta4.jpeg","consulta5.jpeg","consulta6.jpeg","consulta7.jpeg","consulta8.jpeg","consulta9.jpeg","consulta10.jpeg","consulta11.jpeg","consulta12.jpeg","consulta13.jpeg",
+            "consulta1.jpeg","consulta2.jpeg","consulta3.jpeg","consulta4.jpeg","consulta5.jpeg","consulta6.jpeg","consulta7.jpeg","consulta8.jpeg","consulta9.jpeg","consulta10.jpeg","consulta11.jpeg",
             "detalle.jpeg",
             "detallecamilla.jpeg",
             "pasillo.jpeg","pasillo2.jpeg","pasillo3.jpeg","pasillo4.jpeg"
@@ -265,27 +311,27 @@
         carousel.addEventListener('mouseleave', () => autoplayInterval = setInterval(nextSlide, 4000));
     </script>
     <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const overlay = document.createElement("div");
-    overlay.id = "screenSaverOverlay";
-    document.body.appendChild(overlay);
+    document.addEventListener("DOMContentLoaded", () => {
+        const overlay = document.createElement("div");
+        overlay.id = "screenSaverOverlay";
+        document.body.appendChild(overlay);
 
-    function fadeCycle() {
-        // Fade in
-        overlay.style.opacity = "1";
+        function fadeCycle() {
+            // Fade in
+            overlay.style.opacity = "1";
 
-        setTimeout(() => {
-            // Fade out
-            overlay.style.opacity = "0";
-        }, 3000); // Tiempo visible en negro (3 segundos)
-    }
+            setTimeout(() => {
+                // Fade out
+                overlay.style.opacity = "0";
+            }, 3000); // Tiempo visible en negro (3 segundos)
+        }
 
-    // Repetir cada 5 minutos (5 * 60 * 1000)
-    setInterval(fadeCycle, 5 * 60 * 1000);
+        // Repetir cada 5 minutos (5 * 60 * 1000)
+        setInterval(fadeCycle, 5 * 60 * 1000);
 
-    // Primer fade después de 10 segundos para probar
-    setTimeout(fadeCycle, 10000);
-});
-</script>
+        // Primer fade después de 10 segundos para probar
+        setTimeout(fadeCycle, 10000);
+    });
+    </script>
 </body>
 </html>
