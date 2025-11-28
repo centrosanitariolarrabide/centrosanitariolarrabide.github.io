@@ -1,1 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquiler Consulta Sanitaria - TV Display</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-dark: #1e293b;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+            background-color: var(--white);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header compacto pero impactante */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 2.5rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        
+        /* Banner de precio destacado */
+        .price-banner {
+            background: var(--accent-color);
+            color: var(--white);
+            padding: 3rem;
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .price-banner .price {
+            font-size: 6rem;
+            display: block;
+            margin: 1rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* Contenedor principal con distribución vertical */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            overflow: hidden;
+        }
+        
+        /* Carrusel optimizado */
+        .carousel-container {
+            width: 100%;
+            height: 1200px;
+            margin: 2rem auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            position: relative;
+            background: #f0f0f0;
+        }
+        
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .carousel-slide.active {
+            opacity: 1;
+        }
+        
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .carousel-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            z-index: 10;
+        }
+        
+        .carousel-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            border: 3px solid var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .carousel-dot.active {
+            background: var(--white);
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+        
+        /* Características destacadas (solo 4) */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 2.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 3px solid var(--accent-color);
+        }
+        
+        .feature-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        
+        .feature-card p {
+            color: var(--text-dark);
+            font-size: 1.6rem;
+            line-height: 1.4;
+        }
+        
+        /* Información de contacto prominente */
+        .contact-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 3rem;
+            border-radius: 16px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .contact-section h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .phone-number {
+            font-size: 6rem;
+            font-weight: 900;
+            display: block;
+            margin: 1.5rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 0.2rem;
+            color: #ffffff !important;
+            text-decoration: none;
+        }
+        
+        .phone-number:visited,
+        .phone-number:hover,
+        .phone-number:active {
+            color: #ffffff !important;
+        }
+        
+        .contact-info-text {
+            font-size: 2rem;
+            margin-top: 1rem;
+            opacity: 0.95;
+        }
+        
+        /* Overlay para fade a negro */
+        #screenSaverOverlay {
+            position: fixed;
+            inset: 0;
+            background: black;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: opacity 2s ease-in-out;
+        }
+        
+        /* Animación sutil de pulso para precio */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .price {
+            animation: pulse 3s ease-in-out infinite;
+        }
 
+        /* Loading indicator para debug */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Alquiler de Consulta Sanitaria</h1>
+        <p class="subtitle">CENTRO SANITARIO LARRABIDE</p>
+    </header>
+    
+    <div class="price-banner">
+        Alquila tu consulta
+        <span class="price">desde 180€/mes</span>
+    </div>
+    
+    <div class="main-content">
+        <!-- Carrusel -->
+        <div class="carousel-container">
+            <div class="carousel" id="carousel">
+                <div class="loading">Cargando imágenes...</div>
+            </div>
+            <div class="carousel-controls" id="carouselControls"></div>
+        </div>
+        
+        <!-- 4 Características principales -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🏥</div>
+                <h3>Habilitación Sociosanitaria</h3>
+                <p>Centro totalmente habilitado con todas las licencias</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>Totalmente Equipado</h3>
+                <p>Mobiliario profesional incluido</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Todo Incluido</h3>
+                <p>Climatización, limpieza e internet</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Disponible Ya</h3>
+                <p>Empieza a trabajar hoy mismo</p>
+            </div>
+        </div>
+        
+        <!-- Contacto destacado -->
+        <div class="contact-section">
+            <h2>Información y Reservas</h2>
+            <div class="phone-number">643 85 68 07</div>
+            <p class="contact-info-text">Lunes a Viernes · 9:00 - 20:00h</p>
+        </div>
+    </div>
+    
+    <div id="screenSaverOverlay"></div>
+    
+    <script>
+        // Lista de imágenes - IMPORTANTE: deben estar en la misma carpeta que este HTML
+        const images = [
+            "sala1.jpeg",
+            "sala2.jpeg",
+            "salaespera2.jpeg",
+            "salaespera3.jpeg",
+            "consulta1.jpeg",
+            "consulta2.jpeg",
+            "consulta3.jpeg",
+            "consulta4.jpeg",
+            "consulta5.jpeg",
+            "consulta6.jpeg",
+            "consulta7.jpeg",
+            "consulta8.jpeg",
+            "consulta9.jpeg",
+            "consulta10.jpeg",
+            "consulta11.jpeg",
+            "consulta12.jpeg",
+            "consulta13.jpeg",
+            "detalle.jpeg",
+            "detallecamilla.jpeg",
+            "pasillo.jpeg",
+            "pasillo2.jpeg",
+            "pasillo3.jpeg",
+            "pasillo4.jpeg"
+        ];
+
+        const carousel = document.getElementById('carousel');
+        const controls = document.getElementById('carouselControls');
+        let currentSlide = 0;
+        let autoplayInterval;
+
+        function altFromFilename(name) {
+            return name.replace(/[-_\.]/g, ' ').replace(/\bjpeg\b|\bjpg\b/gi, '').replace(/\d+/g, '').trim() || 'Imagen consulta';
+        }
+
+        // Limpiar el loading
+        carousel.innerHTML = '';
+
+        // Crear slides y controles
+        images.forEach((file, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide' + (index === 0 ? ' active' : '');
+
+            const img = document.createElement('img');
+            img.src = file; // Ruta relativa simplificada
+            img.alt = altFromFilename(file);
+            img.loading = index === 0 ? 'eager' : 'lazy';
+            
+            // Mejor manejo de errores
+            img.onerror = function() {
+                console.error('Error cargando imagen:', file);
+                this.style.display = 'none';
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'loading';
+                errorDiv.textContent = `Imagen no disponible: ${file}`;
+                slide.appendChild(errorDiv);
+            };
+
+            img.onload = function() {
+                console.log('Imagen cargada correctamente:', file);
+            };
+
+            slide.appendChild(img);
+            carousel.appendChild(slide);
+
+            const dot = document.createElement('span');
+            dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+            dot.dataset.slide = index;
+            controls.appendChild(dot);
+
+            dot.addEventListener('click', () => showSlide(index));
+        });
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            if (slides.length === 0) return;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        // Autoplay cada 5 segundos
+        autoplayInterval = setInterval(nextSlide, 5000);
+
+        // Fade a negro cada 5 minutos
+        const overlay = document.getElementById("screenSaverOverlay");
+
+        function fadeCycle() {
+            overlay.style.opacity = "1";
+            setTimeout(() => {
+                overlay.style.opacity = "0";
+            }, 3000);
+        }
+
+        // Cada 5 minutos (300000ms)
+        setInterval(fadeCycle, 5 * 60 * 1000);
+        
+        // Primera prueba a los 10 segundos (para testing)
+        setTimeout(fadeCycle, 10000);
+
+        // Debug: mostrar si las imágenes están cargando
+        console.log('Total de imágenes a cargar:', images.length);
+    </script>
+</body>
+</html>
