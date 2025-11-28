@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Alquila tu consulta médica desde 180€/mes en centro sanitario con habilitación sociosanitaria. Despachos equipados para profesionales de la salud en Pamplona.">
     <meta name="keywords" content="alquiler consulta médica,alquiler consulta sanitaria, consulta sanitaria, habilitación sociosanitaria, consulta médica Pamplona, alquiler centro médico, consulta profesionales salud">
     <meta name="author" content="Centro Médico Alquiler Consultas">
@@ -11,18 +11,15 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alquilerconsultasanitaria.org/">
     <meta property="og:image" content="https://alquilerconsultasanitaria.org/imagen-principal.jpg">
-    <meta property="og:image:alt" content="Consulta sanitaria en Pamplona totalmente equipada para profesionales">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Consulta sanitaria en Pamplona totalmente equipada para profesionales">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
     <title>Alquiler de Consulta Sanitaria en Pamplona | Habilitación Sociosanitaria | Desde 180€</title>
 
     <style>
-        /* Variables de diseño base para el "stage" (ajusta si quieres otra base) */
-        :root{
-            --base-w: 1080;   /* ancho base del diseño en px */
-            --base-h: 1920;   /* alto base del diseño en px (vertical) */
-            --safe-pad: 0.03; /* 3% de margen seguro para TV/overscan */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
             --primary-color: #2563eb;
             --secondary-color: #1e40af;
             --accent-color: #3b82f6;
@@ -30,53 +27,26 @@
             --text-light: #64748b;
             --bg-light: #f8fafc;
             --white: #ffffff;
+            .visually-hidden {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
         }
-
-        /* Reset mínimo */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-dark); line-height: 1.6; background-color: var(--white); overflow: hidden; }
-
-        /* Clase accesible oculta (corregida fuera de :root) */
-        .visually-hidden {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-
-        /* SCALER: ocupa el viewport completo */
-        #scaler{ width:100vw; height:100vh; overflow:hidden; position:relative; background: #111; display:flex; align-items:center; justify-content:center; }
-
-        /* STAGE: el "diseño" con tamaño fijo (se escala con JS) */
-        #stage{
-            width: calc(var(--base-w) * 1px);
-            height: calc(var(--base-h) * 1px);
-            transform-origin: top left;
-            background: var(--white);
-            color: var(--text-dark);
-            padding: calc(var(--base-h) * var(--safe-pad)) calc(var(--base-w) * var(--safe-pad));
-            border-radius: 6px;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.25);
-            overflow: hidden; /* todo el contenido debe caber en el stage */
-            position: absolute; /* la JS centra el stage dentro del scaler */
-            left: 0; top: 0;
-        }
-
-        /* Tus estilos originales (ligeramente adaptados al stage) */
-        header { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.08); border-radius: 6px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-dark); line-height: 1.6; background-color: var(--white); }
+        header { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.08); }
         h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
         .subtitle { font-size: 1.3rem; opacity: 0.95; font-weight: 400; }
-        .price-banner { background: var(--accent-color); color: var(--white); padding: 2rem 1.5rem; text-align: center; font-size: 2rem; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius:8px; }
+        .price-banner { background: var(--accent-color); color: var(--white); padding: 2rem 1.5rem; text-align: center; font-size: 2rem; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .price-banner .price { font-size: 3rem; display: block; margin: 0.5rem 0; }
-        .container { max-width: 840px; margin: 0 auto; padding: 3rem 1.5rem; } /* reducido para mejor lectura en vertical */
-        .carousel-container { position: relative; width: 100%; max-width: 100%; margin: 0 auto 3rem; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); background: var(--bg-light); }
-        .carousel { position: relative; width: 100%; min-height: 420px; display: flex; align-items: center; justify-content: center; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+        .carousel-container { position: relative; width: 100%; max-width: 1000px; margin: 0 auto 3rem; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); background: var(--bg-light); }
+        .carousel { position: relative; width: 100%; min-height: 500px; display: flex; align-items: center; justify-content: center; }
         .carousel-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease-in-out; }
         .carousel-slide.active { opacity: 1; }
         .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .carousel-controls { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 10; }
+        .carousel-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 10; }
         .carousel-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.5); border: 2px solid var(--white); cursor: pointer; transition: all 0.3s; }
         .carousel-dot.active { background: var(--white); transform: scale(1.2); }
         .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 3rem 0; }
@@ -96,15 +66,13 @@
         .contact-info { text-align: center; margin: 3rem 0; }
         .phone-number { font-size: 2.5rem; color: var(--primary-color); font-weight: 700; margin: 1rem 0; display: block; text-decoration: none; }
         .phone-number:hover { color: var(--secondary-color); }
-        footer { background: var(--text-dark); color: var(--white); text-align: center; padding: 2rem 1.5rem; margin-top: 4rem; border-radius:6px; }
-
-        /* Ajustes para viewports pequeños (navegación normal en móvil) */
+        footer { background: var(--text-dark); color: var(--white); text-align: center; padding: 2rem 1.5rem; margin-top: 4rem; }
         @media (orientation: portrait) and (max-width: 768px) {
             h1 { font-size: 2rem; }
             .subtitle { font-size: 1.1rem; }
             .price-banner { padding: 1.5rem 1rem; font-size: 1.5rem; }
             .price-banner .price { font-size: 2.5rem; }
-            .carousel { min-height: 360px; }
+            .carousel { min-height: 400px; }
             .features { grid-template-columns: 1fr; }
             .cta-section h2 { font-size: 1.8rem; }
             .cta-buttons { flex-direction: column; align-items: center; }
@@ -117,119 +85,109 @@
             .carousel { min-height: 300px; }
             .feature-card { padding: 1.5rem; }
         }
-
-        /* Overlay de "screensaver" */
-        #screenSaverOverlay {
-            position: fixed;
-            inset: 0;
-            background: black;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 9999;
-            transition: opacity 2s ease-in-out;
-        }
     </style>
+    <style>
+#screenSaverOverlay {
+    position: fixed;
+    inset: 0;
+    background: black;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 2s ease-in-out;
+}
+</style>
 </head>
 <body>
-    <!-- SCALER + STAGE: todo tu contenido dentro del stage para que JS lo escale -->
-    <div id="scaler">
-        <div id="stage" role="main" aria-label="Contenido principal">
+    <header>
+        <h1>Alquiler de Consulta Sanitaria en Pamplona | Centro Sanitario con Habilitación</h1>
+        <h1 class="subtitle">CENTRO SANITARIO LARRABIDE</h1>
+    </header>
+    <p class="visually-hidden">
+    Alquila tu consulta sanitaria en Pamplona en un centro totalmente habilitado. Espacios profesionales, equipados, con servicios incluidos y disponibilidad inmediata para médicos, psicólogos, fisioterapeutas y otros profesionales de la salud.
+</p>
 
-            <header>
-                <h1>Alquiler de Consulta Sanitaria en Pamplona | Centro Sanitario con Habilitación</h1>
-                <h1 class="subtitle">CENTRO SANITARIO LARRABIDE</h1>
-            </header>
+<div class="price-banner">
+    Alquila tu consulta
+    <span class="price">desde 180€/mes</span>
+</div>
+    
+    <div class="container">
+        <!-- Carousel -->
+        <div class="carousel-container">
+            <div class="carousel" id="carousel" aria-live="polite"></div>
+            <div class="carousel-controls" id="carouselControls" role="tablist" aria-label="Controles del carrusel"></div>
+        </div>
 
-            <p class="visually-hidden">
-                Alquila tu consulta sanitaria en Pamplona en un centro totalmente habilitado. Espacios profesionales, equipados, con servicios incluidos y disponibilidad inmediata para médicos, psicólogos, fisioterapeutas y otros profesionales de la salud.
+        <!-- Features -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🏥</div>
+                <h3>Habilitación Sociosanitaria</h3>
+                <p>Centro totalmente habilitado y con todas las licencias necesarias para tu actividad sanitaria</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>Totalmente Equipado</h3>
+                <p>Consultas completamente equipadas con mobiliario profesional y todo lo necesario para trabajar</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Excelente Ubicación</h3>
+                <p>Centro médico en zona accesible con buenas comunicaciones y aparcamiento disponible</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💼</div>
+                <h3>Flexible y Profesional</h3>
+                <p>Espacios adaptables a tus necesidades con ambiente profesional y sala de espera compartida</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Servicios Incluidos</h3>
+                <p>Climatización, limpieza, internet de alta velocidad y recepción compartida incluidos en el precio</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Disponibilidad Inmediata</h3>
+                <p>Empieza a trabajar desde el primer día sin obras ni esperas. Listo para usar</p>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>¿Listo para tu consulta?</h2>
+            <p style="font-size: 1.2rem; margin: 1rem 0;">Contacta ahora y reserva tu espacio profesional</p>
+            
+            <div class="cta-buttons">
+                <a href="tel:643856807" class="btn btn-primary">📞 Llamar Ahora</a>
+                <a href="https://alquilerconsultasanitaria.org/" target="_blank" class="btn btn-secondary">🌐 Más Información</a>
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+            <h2>Información y Reservas</h2>
+            <a href="tel:643856807" class="phone-number">643 85 68 07</a>
+            <p style="color: var(--text-light); font-size: 1.1rem; margin-top: 1rem;">
+                Horario: Lunes a Viernes de 9:00 a 20:00h
             </p>
+        </div>
+    </div>
 
-            <div class="price-banner" aria-hidden="false">
-                Alquila tu consulta
-                <span class="price">desde 180€/mes</span>
-            </div>
-
-            <div class="container">
-                <!-- Carousel -->
-                <div class="carousel-container">
-                    <div class="carousel" id="carousel" aria-live="polite"></div>
-                    <div class="carousel-controls" id="carouselControls" role="tablist" aria-label="Controles del carrusel"></div>
-                </div>
-
-                <!-- Features -->
-                <div class="features">
-                    <div class="feature-card">
-                        <div class="feature-icon">🏥</div>
-                        <h3>Habilitación Sociosanitaria</h3>
-                        <p>Centro totalmente habilitado y con todas las licencias necesarias para tu actividad sanitaria</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">✨</div>
-                        <h3>Totalmente Equipado</h3>
-                        <p>Consultas completamente equipadas con mobiliario profesional y todo lo necesario para trabajar</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">📍</div>
-                        <h3>Excelente Ubicación</h3>
-                        <p>Centro médico en zona accesible con buenas comunicaciones y aparcamiento disponible</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">💼</div>
-                        <h3>Flexible y Profesional</h3>
-                        <p>Espacios adaptables a tus necesidades con ambiente profesional y sala de espera compartida</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">🔐</div>
-                        <h3>Servicios Incluidos</h3>
-                        <p>Climatización, limpieza, internet de alta velocidad y recepción compartida incluidos en el precio</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <h3>Disponibilidad Inmediata</h3>
-                        <p>Empieza a trabajar desde el primer día sin obras ni esperas. Listo para usar</p>
-                    </div>
-                </div>
-
-                <!-- CTA Section -->
-                <div class="cta-section">
-                    <h2>¿Listo para tu consulta?</h2>
-                    <p style="font-size: 1.2rem; margin: 1rem 0;">Contacta ahora y reserva tu espacio profesional</p>
-
-                    <div class="cta-buttons">
-                        <a href="tel:643856807" class="btn btn-primary">📞 Llamar Ahora</a>
-                        <a href="https://alquilerconsultasanitaria.org/" target="_blank" class="btn btn-secondary">🌐 Más Información</a>
-                    </div>
-                </div>
-
-                <!-- Contact Info -->
-                <div class="contact-info">
-                    <h2>Información y Reservas</h2>
-                    <a href="tel:643856807" class="phone-number">643 85 68 07</a>
-                    <p style="color: var(--text-light); font-size: 1.1rem; margin-top: 1rem;">
-                        Horario: Lunes a Viernes de 9:00 a 20:00h
-                    </p>
-                </div>
-            </div>
-
-            <footer>
-                <p>&copy; 2024 Alquiler Consulta Sanitaria | Centro Médico con Habilitación Sociosanitaria</p>
-                <p style="margin-top: 0.5rem; opacity: 0.8;">
-                    <a href="https://alquilerconsultasanitaria.org/" style="color: var(--white); text-decoration: none;">alquilerconsultasanitaria.org</a>
-                </p>
-            </footer>
-
-        </div> <!-- /stage -->
-    </div> <!-- /scaler -->
-
-    <div id="screenSaverOverlay"></div>
+    <footer>
+        <p>&copy; 2024 Alquiler Consulta Sanitaria | Centro Médico con Habilitación Sociosanitaria</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">
+            <a href="https://alquilerconsultasanitaria.org/" style="color: var(--white); text-decoration: none;">alquilerconsultasanitaria.org</a>
+        </p>
+    </footer>
 
     <script>
-        // Lista de imágenes (mantengo la tuya)
+        // Lista de imágenes existentes en la carpeta (detectadas en el repo)
         const images = [
             "sala1.jpeg",
             "sala2.jpeg",
@@ -244,10 +202,12 @@
         const carousel = document.getElementById('carousel');
         const controls = document.getElementById('carouselControls');
 
+        // Helper para generar texto alt legible a partir del nombre del archivo
         function altFromFilename(name) {
             return name.replace(/[-_\.]/g, ' ').replace(/\bjpeg\b|\bjpg\b/gi, '').replace(/\d+/g, '').trim() || 'Imagen';
         }
 
+        // Crear slides y controles basados en la lista de imágenes
         images.forEach((file, index) => {
             const slide = document.createElement('div');
             slide.className = 'carousel-slide' + (index === 0 ? ' active' : '');
@@ -300,73 +260,32 @@
         function nextSlide() { showSlide(currentSlide + 1); }
         let autoplayInterval = setInterval(nextSlide, 4000);
 
+        // Pausar autoplay al pasar el ratón y reanudar al salir (mejor experiencia en desktop)
         carousel.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
         carousel.addEventListener('mouseleave', () => autoplayInterval = setInterval(nextSlide, 4000));
     </script>
-
     <script>
-        // Screen saver overlay (mantengo tu lógica)
-        document.addEventListener("DOMContentLoaded", () => {
-            const overlay = document.getElementById("screenSaverOverlay");
+document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.createElement("div");
+    overlay.id = "screenSaverOverlay";
+    document.body.appendChild(overlay);
 
-            function fadeCycle() {
-                overlay.style.opacity = "1";
-                setTimeout(() => {
-                    overlay.style.opacity = "0";
-                }, 3000); // 3s visible
-            }
+    function fadeCycle() {
+        // Fade in
+        overlay.style.opacity = "1";
 
-            // Cada 5 minutos
-            setInterval(fadeCycle, 5 * 60 * 1000);
-            // Primer fade de prueba tras 10s
-            setTimeout(fadeCycle, 10000);
-        });
-    </script>
+        setTimeout(() => {
+            // Fade out
+            overlay.style.opacity = "0";
+        }, 3000); // Tiempo visible en negro (3 segundos)
+    }
 
-    <script>
-    /* SCALER JS: ajusta el #stage para que quepa entero dentro del viewport (sin scroll).
-       - Lee --base-w y --base-h desde :root
-       - Calcula scale = min(viewW/baseW, viewH/baseH)
-       - Aplica transform: scale(...) y centra el stage
-    */
-    (function(){
-        const stage = document.getElementById('stage');
-        const scaler = document.getElementById('scaler');
-        const css = getComputedStyle(document.documentElement);
-        const baseW = parseFloat(css.getPropertyValue('--base-w')) || 1080;
-        const baseH = parseFloat(css.getPropertyValue('--base-h')) || 1920;
-        const safePad = parseFloat(css.getPropertyValue('--safe-pad')) || 0.03;
+    // Repetir cada 5 minutos (5 * 60 * 1000)
+    setInterval(fadeCycle, 5 * 60 * 1000);
 
-        function fit() {
-            const vw = window.innerWidth;
-            const vh = window.innerHeight;
-            let scale = Math.min(vw / baseW, vh / baseH);
-
-            // Opcional: limitar escalado máximo (ajusta o elimina si quieres)
-            const maxUpscale = 2.5;
-            if (scale > maxUpscale) scale = maxUpscale;
-
-            stage.style.transform = 'scale(' + scale + ')';
-
-            // Centrar stage
-            const scaledW = baseW * scale;
-            const scaledH = baseH * scale;
-            stage.style.left = ((vw - scaledW) / 2) + 'px';
-            stage.style.top  = ((vh - scaledH) / 2) + 'px';
-
-            // Forzar que body no haga scroll y que la altura sea la de la ventana
-            document.body.style.height = window.innerHeight + 'px';
-        }
-
-        window.addEventListener('resize', fit);
-        window.addEventListener('orientationchange', fit);
-        fit();
-
-        // Si quieres bloquear gestos táctiles que provoquen desplazamiento en kiosk:
-        window.addEventListener('touchmove', function(e){
-            // e.preventDefault(); // descomenta si necesitas bloquear todo el scroll táctil
-        }, {passive: false});
-    })();
-    </script>
+    // Primer fade después de 10 segundos para probar
+    setTimeout(fadeCycle, 10000);
+});
+</script>
 </body>
 </html>
