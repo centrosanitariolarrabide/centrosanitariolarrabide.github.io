@@ -80,6 +80,19 @@
         .btn-primary { background: var(--white); color: var(--primary-color); }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.08); }
         .btn-secondary { background: transparent; color: var(--white); border: 2px solid var(--white); }
+        /* Botón WhatsApp */
+        .btn-whatsapp {
+            background: #25D366;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-block;
+            text-decoration: none;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+        .btn-whatsapp:hover { filter: brightness(0.95); transform: translateY(-2px); }
         .contact-info { text-align: center; margin: 2.5rem 0; }
         .phone-number { font-size: 2rem; color: var(--primary-color); font-weight: 700; margin: 0.6rem 0; display: inline-block; text-decoration: none; }
         .phone-number:hover { color: var(--secondary-color); }
@@ -181,6 +194,11 @@
             <a href="tel:643856807" class="phone-number">643 85 68 07</a>
             <p style="color: var(--text-light); font-size: 1rem; margin-top: 0.6rem;">
                 Horario: Lunes a Viernes de 9:00 a 20:00h
+            </p>
+
+            <!-- Botón de WhatsApp añadido debajo del teléfono -->
+            <p style="margin-top:1rem;">
+                <a href="https://wa.me/34643856807?text=Hola%2C%20estoy%20interesado%20en%20alquilar%20una%20consulta." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Contactar por WhatsApp">💬 WhatsApp</a>
             </p>
         </section>
     </main>
