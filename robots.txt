@@ -1,4 +1,4 @@
 User-agent: *
-Allow: /
+Disallow: /tv_add/
 
 Sitemap: https://centrosanitariolarrabide.github.io/sitemap.xml
