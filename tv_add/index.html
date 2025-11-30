@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Alquiler Consulta Sanitaria - TV Display</title>
   <style>
+    /* Contenedor que rota la página -90deg (270°) */
+    .portrait-wrap {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg); /* 270° */
+      transform-origin: center center;
+      width: 100vh;   /* intercambia ancho/alto para portrait */
+      height: 100vw;
+      overflow: hidden;
+    }
+
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{
       height:100%;
@@ -12,6 +24,7 @@
       background:#000;
       color:#fff;
       overflow:hidden;
+      position:relative;
     }
     header{
       background:linear-gradient(135deg,#2563eb,#1e40af);
@@ -163,43 +176,46 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>Centro Sanitario Larrabide</h1>
-    <div class="telefono">TEF: 643 85 68 07</div>
-  </header>
+  <!-- Envolvemos TODO en .portrait-wrap para rotarlo -->
+  <div class="portrait-wrap">
+    <header>
+      <h1>Centro Sanitario Larrabide</h1>
+      <div class="telefono">TEF: 643 85 68 07</div>
+    </header>
 
-  <div class="price-banner">Alquila tu consulta — desde 180€/mes</div>
+    <div class="price-banner">Alquila tu consulta — desde 180€/mes</div>
 
-  <div class="main-content">
-    <div class="carousel-container" aria-label="Galería de imágenes">
-      <div class="carousel" id="carousel">
-        <div class="loading" id="loading">Comprobando imágenes…</div>
+    <div class="main-content">
+      <div class="carousel-container" aria-label="Galería de imágenes">
+        <div class="carousel" id="carousel">
+          <div class="loading" id="loading">Comprobando imágenes…</div>
+        </div>
+        <div class="carousel-controls" id="carouselControls" aria-hidden="true"></div>
       </div>
-      <div class="carousel-controls" id="carouselControls" aria-hidden="true"></div>
+
+      <!-- Bloque informativo con la imagen QR en tamaño grande -->
+      <div class="info-extra">
+        <div class="services">
+          <h2>Especialidades</h2>
+          <p>Espacios versátiles para cualquier especialidad sanitaria.</p>
+          <p>Consulta para profesionales de la salud: medicina, terapia, psicología… y más.</p>
+        </div>
+        <div class="horario">
+          <h2>Horario</h2>
+          <p>Lunes a viernes: 8:00 - 20:00</p>
+          <p>Sábados: 9:00 - 14:00</p>
+        </div>
+        <div class="direccion">
+          <h2>Ubicación</h2>
+          <p>Larrabide 3, Pamplona</p>
+        </div>
+        <div class="qr-contacto" style="text-align:center; margin-top:1.5rem;">
+          <img src="qr-code.png" alt="QR para WhatsApp">
+          <span>Contacta o reserva fácilmente: escanea el QR (WhatsApp)</span>
+        </div>
+      </div>
+      <!-- Fin del bloque informativo -->
     </div>
-
-    <!-- Bloque informativo con la imagen QR en tamaño grande -->
-    <div class="info-extra">
-      <div class="services">
-        <h2>Especialidades</h2>
-        <p>Espacios versátiles para cualquier especialidad sanitaria.</p>
-        <p>Consulta para profesionales de la salud: medicina, terapia, psicología… y más.</p>
-      </div>
-      <div class="horario">
-        <h2>Horario</h2>
-        <p>Lunes a viernes: 8:00 - 20:00</p>
-        <p>Sábados: 9:00 - 14:00</p>
-      </div>
-      <div class="direccion">
-        <h2>Ubicación</h2>
-        <p>Larrabide 3, Pamplona</p>
-      </div>
-      <div class="qr-contacto" style="text-align:center; margin-top:1.5rem;">
-        <img src="qr-code.png" alt="QR para WhatsApp">
-        <span>Contacta o reserva fácilmente: escanea el QR (WhatsApp)</span>
-      </div>
-    </div>
-    <!-- Fin del bloque informativo -->
   </div>
 
   <script>
