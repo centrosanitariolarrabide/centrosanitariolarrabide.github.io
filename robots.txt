@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /tv_add/
+Disallow:
 
-Sitemap: https://centrosanitariolarrabide.github.io/sitemap.xml
+Sitemap: https://centrosanitariolarrabide.github.io/alquilerconsultasanitaria/sitemap.xml
