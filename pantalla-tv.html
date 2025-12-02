@@ -1,302 +1,57 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Centro Sanitario Larrabide - Proyección TV</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <style>
-        /* Copia de estilos para anuncio y carrusel: */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1e293b; line-height: 1.6; background: linear-gradient(to bottom right,#2563eb,#1e40af); margin: 0; padding: 0; }
-        header { background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; padding: 2.5rem 1.5rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.08); }
-        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
-        .subtitle { font-size: 1.3rem; opacity: 0.95; font-weight: 400; }
-        .price-banner { background: #3b82f6; color: #fff; padding: 2rem 1.5rem; text-align: center; font-size: 2rem; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .price-banner .price { font-size: 3rem; display: block; margin: 0.5rem 0; }
-        .carousel-container { position: relative; width: 100%; max-width: 1000px; margin: 0 auto 3rem; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); background: #f8fafc; }
-        .carousel { position: relative; width: 100%; min-height: 500px; display: flex; align-items: center; justify-content: center; }
-        .carousel-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease-in-out; }
-        .carousel-slide.active { opacity: 1; }
-        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .carousel-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 10; }
-        .carousel-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.5); border: 2px solid #fff; cursor: pointer; transition: all 0.3s; }
-        .carousel-dot.active { background: #fff; transform: scale(1.2); }
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 3rem 0; }
-        .feature-card { background: #f8fafc; padding: 2rem; border-radius: 12px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid transparent; }
-        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15); border-color: #3b82f6; }
-        .feature-icon { font-size: 3rem; margin-bottom: 1rem; }
-        .feature-card h3 { color: #2563eb; margin-bottom: 0.8rem; font-size: 1.4rem; }
-        .feature-card p { color: #64748b; font-size: 1rem; }
-        .cta-section { background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; padding: 3rem 2rem; border-radius: 12px; text-align: center; margin: 3rem 0; }
-        .cta-section h2 { font-size: 2.2rem; margin-bottom: 1.5rem; }
-        .cta-buttons { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
-        .btn { padding: 1.2rem 2.5rem; font-size: 1.2rem; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; font-weight: 600; }
-        .btn-primary { background: #fff; color: #2563eb; }
-        .btn-secondary { background: transparent; color: #fff; border: 2px solid #fff; }
-        .btn-primary:hover, .btn-secondary:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(255,255,255,0.3); background: #fff; color: #2563eb; }
-        .contact-info { text-align: center; margin: 3rem 0; }
-        .phone-number { font-size: 2.5rem; color: #2563eb; font-weight: 700; margin: 1rem 0; display: block; text-decoration: none; }
-        .phone-number:hover { color: #1e40af; }
-        @media (orientation: portrait) and (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .subtitle { font-size: 1.1rem; }
-            .price-banner { padding: 1.5rem 1rem; font-size: 1.5rem; }
-            .price-banner .price { font-size: 2.5rem; }
-            .carousel { min-height: 300px; }
-            .features { grid-template-columns: 1fr; }
-            .cta-section h2 { font-size: 1.8rem; }
-            .cta-buttons { flex-direction: column; align-items: center; }
-            .btn { width: 100%; max-width: 300px; }
-            .phone-number { font-size: 2rem; }
-        }
-    </style>
-    <!-- Estilos y scripts propios para los profesionales abajo -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-<div id="root"></div>
-<script type="text/babel">
+<!-- Snippet: ayuda/menú rápido para TV (pégalo tras <div id="root"></div>) -->
+<style>
+  .tv-help {
+    position: fixed;
+    left: 50%;
+    top: calc(var(--tv-top-offset, 9cm) + 10px);
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    z-index: 9999;
+    max-width: 90%;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+  .tv-help p { margin: 0.2rem 0; }
+  .tv-help .muted { opacity: 0.85; font-size: 0.9rem; }
+  .tv-help .close-btn {
+    display:inline-block;margin-left:12px;padding:6px 10px;border-radius:6px;background:#fff;color:#123;border:none;cursor:pointer;font-weight:700;
+  }
+  @media (min-width:1600px) { .tv-help { font-size:1.05rem; } }
+</style>
 
-const SLIDE_DURATION = 12000; // 12 segundos por slide
-const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv';
+<div id="tvHelp" class="tv-help" role="dialog" aria-live="polite" aria-labelledby="tvHelpTitle">
+  <strong id="tvHelpTitle">Ayuda rápida</strong>
+  <p class="muted">Flechas ↑/↓ mover contenido • + / - cambiar tamaño texto • ? parámetros: ?offset=8.5cm&scale=1.25</p>
+  <p style="margin-top:6px">Pulsa <button class="close-btn" id="tvHelpClose">OK</button> para ocultar</p>
+</div>
 
-// Esta lista debe coincidir con tus imágenes en la carpeta (ajusta si cambias nombres)
-const images = [
-    "sala1.jpeg",
-    "sala2.jpeg",
-    "salaespera2.jpeg",
-    "salaespera3.jpeg",
-    "consulta1.jpeg","consulta2.jpeg","consulta3.jpeg","consulta4.jpeg","consulta5.jpeg","consulta6.jpeg","consulta7.jpeg","consulta8.jpeg","consulta9.jpeg","consulta10.jpeg","consulta11.jpeg","consulta12.jpeg","consulta13.jpeg",
-    "detalle.jpeg",
-    "detallecamilla.jpeg",
-    "pasillo.jpeg","pasillo2.jpeg","pasillo3.jpeg","pasillo4.jpeg"
-];
-
-// Helper CSV compatible tab/coma
-function parseCSV(csv) {
-    const lines = csv.trim().split('\n');
-    if (lines.length < 2) return [];
-    const isTab = lines[0].includes('\t');
-    const headers = lines[0].split(isTab ? '\t' : ',').map(h => h.trim());
-    const data = [];
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i];
-        const values = line.split(isTab ? '\t' : ',').map(v => v.trim());
-        let obj = {};
-        headers.forEach((header, idx) => obj[header] = values[idx] || '');
-        if (obj.numeroDespacho) data.push(obj);
-    }
-    return data.sort((a,b) => (parseInt(a.numeroDespacho)||0)-(parseInt(b.numeroDespacho)||0));
-}
-
-// Slide de anuncio con carrusel y toda la info
-function AnuncioCarrusel() {
-    React.useEffect(() => {
-        // Carrusel puro JS igual que tu ejemplo (puedes usar React aquí si lo prefieres)
-        const imagesList = images;
-        const carousel = document.getElementById('carousel');
-        const controls = document.getElementById('carouselControls');
-        if (!carousel || !controls) return;
-        carousel.innerHTML = "";
-        controls.innerHTML = "";
-
-        function altFromFilename(name) {
-            return name.replace(/[-_\.]/g, ' ').replace(/\bjpeg\b|\bjpg\b/gi, '').replace(/\d+/g, '').trim() || 'Imagen';
-        }
-
-        imagesList.forEach((file, index) => {
-            const slide = document.createElement('div');
-            slide.className = 'carousel-slide' + (index === 0 ? ' active' : '');
-            slide.setAttribute('role','group');
-            slide.setAttribute('aria-roledescription','slide');
-            slide.setAttribute('aria-label', `${index+1} de ${imagesList.length}`);
-            const img = document.createElement('img');
-            img.src = './' + file;
-            img.alt = altFromFilename(file);
-            img.loading = 'lazy';
-            img.onerror = function() {
-                this.onerror = null;
-                this.src = 'https://via.placeholder.com/1200x500/2563eb/ffffff?text=Imagen+no+disponible';
-            };
-            slide.appendChild(img);
-            carousel.appendChild(slide);
-
-            const dot = document.createElement('span');
-            dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
-            dot.dataset.slide = index;
-            dot.setAttribute('role','tab');
-            dot.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
-            dot.setAttribute('aria-label', `Ir a la imagen ${index+1}`);
-            controls.appendChild(dot);
-            dot.addEventListener('click', () => showSlide(index));
-        });
-
-        let currentSlide = 0;
-        const slides = () => document.querySelectorAll('.carousel-slide');
-        const dots = () => document.querySelectorAll('.carousel-dot');
-        function showSlide(n) {
-            const s = slides();
-            const d = dots();
-            if (s.length === 0) return;
-            s.forEach(slide => slide.classList.remove('active'));
-            d.forEach(dot => {
-                dot.classList.remove('active');
-                dot.setAttribute('aria-selected','false');
-            });
-            currentSlide = (n + s.length) % s.length;
-            s[currentSlide].classList.add('active');
-            d[currentSlide].classList.add('active');
-            d[currentSlide].setAttribute('aria-selected','true');
-        }
-        function nextSlide() { showSlide(currentSlide + 1); }
-        let autoplayInterval = setInterval(nextSlide, 4000);
-
-        // Pausa/resume autoplay al ratón
-        carousel.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
-        carousel.addEventListener('mouseleave', () => autoplayInterval = setInterval(nextSlide, 4000));
-    }, []);
-
-    return (
-        <div style={{background:"white", borderRadius:"2rem", boxShadow:"0 4px 40px #1e40af40", margin:"2vw 0", overflow:"hidden"}}>
-        <header>
-            <h1>Alquiler de Consulta Sanitaria en Pamplona | Centro Sanitario con Habilitación</h1>
-            <h2 className="subtitle">CENTRO SANITARIO LARRABIDE</h2>
-        </header>
-        <div className="price-banner">
-            Alquila tu consulta
-            <span className="price">desde 180€/mes</span>
-        </div>
-        <div className="container" style={{maxWidth:"1200px", margin:"0 auto", padding:"3rem 1.5rem"}}>
-            <div className="carousel-container">
-                <div className="carousel" id="carousel" aria-live="polite"></div>
-                <div className="carousel-controls" id="carouselControls" role="tablist" aria-label="Controles del carrusel"></div>
-            </div>
-            <div className="features">
-                <div className="feature-card"><div className="feature-icon">🏥</div><h3>Habilitación Sociosanitaria</h3><p>Centro totalmente habilitado y con todas las licencias necesarias para tu actividad sanitaria</p></div>
-                <div className="feature-card"><div className="feature-icon">✨</div><h3>Totalmente Equipado</h3><p>Consultas completamente equipadas con mobiliario profesional y todo lo necesario para trabajar</p></div>
-                <div className="feature-card"><div className="feature-icon">📍</div><h3>Excelente Ubicación</h3><p>Centro médico en zona accesible con buenas comunicaciones y aparcamiento disponible</p></div>
-                <div className="feature-card"><div className="feature-icon">💼</div><h3>Flexible y Profesional</h3><p>Espacios adaptables a tus necesidades con ambiente profesional y sala de espera compartida</p></div>
-                <div className="feature-card"><div className="feature-icon">🔐</div><h3>Servicios Incluidos</h3><p>Climatización, limpieza, internet de alta velocidad y recepción compartida incluidos en el precio</p></div>
-                <div className="feature-card"><div className="feature-icon">⚡</div><h3>Disponibilidad Inmediata</h3><p>Empieza a trabajar desde el primer día sin obras ni esperas. Listo para usar</p></div>
-            </div>
-            <div className="cta-section">
-                <h2>¿Listo para tu consulta?</h2>
-                <p style={{fontSize:"1.2rem", margin:"1rem 0"}}>Contacta ahora y reserva tu espacio profesional</p>
-                <div className="cta-buttons">
-                    <a href="tel:643856807" className="btn btn-primary">📞 Llamar Ahora</a>
-                    <a href="https://alquilerconsultasanitaria.org/" target="_blank" className="btn btn-secondary">🌐 Más Información</a>
-                </div>
-            </div>
-            <div className="contact-info">
-                <h2>Información y Reservas</h2>
-                <a href="tel:643856807" className="phone-number">643 85 68 07</a>
-                <p style={{color:"#64748b", fontSize:"1.1rem", marginTop:"1rem"}}>Horario: Lunes a Viernes de 9:00 a 20:00h</p>
-            </div>
-        </div>
-        </div>
-    );
-}
-
-// Slide profesionales en dos columnas
-function ProfesionalesSlide({ profesionales }) {
-    const mitad = Math.ceil(profesionales.length / 2);
-    const col1 = profesionales.slice(0, mitad);
-    const col2 = profesionales.slice(mitad);
-
-    return (
-        <div style={{background:"white", borderRadius:"2rem", boxShadow:"0 4px 40px #1e40af40", margin:"2vw 0", overflow:"hidden", padding:"2vw"}}>
-            <h2 className="text-blue-900 font-extrabold text-2xl md:text-4xl mb-8 text-center" style={{marginTop:"10px"}}>Profesionales</h2>
-            <div className="w-full flex flex-col md:flex-row gap-8 justify-center">
-                {[col1, col2].map((col,idx)=>(
-                    <div key={idx} className="flex-1 flex flex-col gap-5">
-                        {col.map((prof,ind)=>
-                            <div key={prof.numeroDespacho+"-"+prof.nombre}
-                                className="card prof-card bg-blue-50 rounded-2xl px-6 py-7 shadow-lg border-t-4 border-blue-400 flex gap-4 items-center"
-                            >
-                                <div className="bg-blue-600 text-white rounded-lg w-16 h-16 flex items-center justify-center text-3xl font-bold flex-shrink-0 shadow-lg">
-                                    {prof.numeroDespacho}
-                                </div>
-                                <div className="flex-grow text-left">
-                                    <div className="text-blue-900 font-bold text-lg mb-1">{prof.especialidad}</div>
-                                    <div className="font-semibold text-gray-800 text-md">{prof.nombre}</div>
-                                    {prof.servicios &&
-                                        <div className="text-gray-600 text-sm mt-1">{prof.servicios}</div>
-                                    }
-                                    <div className="mt-2 space-y-1 text-sm">
-                                        {prof.web &&
-                                            <div className="text-blue-600 font-medium">
-                                                <a href={prof.web} target="_blank" rel="noopener noreferrer" className="underline">{prof.web}</a>
-                                            </div>
-                                        }
-                                        {prof.telefono &&
-                                            <div className="text-gray-800 font-bold">Cita previa Tlf: {prof.telefono}</div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-function TVApp() {
-    const [profesionales, setProfesionales] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [slide, setSlide] = React.useState(0);
-    const [slideKey, setSlideKey] = React.useState(0);
-
-    // Cargar profesionales
-    React.useEffect(()=>{
-        async function fetchProfs() {
-            setIsLoading(true);
-            try {
-                const resp = await fetch(GOOGLE_SHEET_URL);
-                if (resp.ok) {
-                    let txt = await resp.text();
-                    let datos = parseCSV(txt);
-                    setProfesionales(datos);
-                }
-            } catch (e) {}
-            setIsLoading(false);
-        }
-        fetchProfs();
-        const timer = setInterval(fetchProfs, 600000);
-        return ()=>clearInterval(timer);
-    },[]);
-
-    // Slide automático
-    const totalSlides = 2;
-    React.useEffect(()=>{
-        const timer = setInterval(()=>{
-            setSlide(prev=> (prev+1)%totalSlides);
-            setSlideKey(prev=> prev+1);
-        }, SLIDE_DURATION);
-        return ()=>clearInterval(timer);
-    },[totalSlides]);
-
-    let content;
-    if (slide === 0) {
-        content = <AnuncioCarrusel key={slideKey} />;
+<script>
+  (function(){
+    const help = document.getElementById('tvHelp');
+    const btn = document.getElementById('tvHelpClose');
+    // Mostrar solo la primera vez en esta sesión (sessionStorage)
+    if (sessionStorage.getItem('tvHelpDismissed')) {
+      help.style.display = 'none';
     } else {
-        content = <ProfesionalesSlide key={slideKey} profesionales={profesionales} />;
+      help.style.display = 'block';
     }
-
-    return (
-        <div className="min-h-screen w-full flex flex-col justify-center items-center">
-            {isLoading && !profesionales.length ? (
-                <div className="text-white text-2xl font-bold mt-20">Cargando profesionales...</div>
-            ) : content}
-        </div>
-    );
-}
-
-ReactDOM.render(<TVApp />,document.getElementById('root'));
-
+    function dismiss(){
+      help.style.display = 'none';
+      sessionStorage.setItem('tvHelpDismissed','1');
+    }
+    btn.addEventListener('click', dismiss);
+    // Mismo cierre con tecla M o Escape
+    window.addEventListener('keydown', function(e){
+      if (e.key === 'm' || e.key === 'M' || e.key === 'Escape' || e.key === '?') dismiss();
+    });
+    // Ajustar posición si se cambia la variable CSS (por ejemplo al usar flechas)
+    const ro = new ResizeObserver(()=> {
+      // for simplicity: no-op; the CSS already usa --tv-top-offset
+    });
+    ro.observe(document.documentElement);
+  })();
 </script>
-</body>
-</html>
