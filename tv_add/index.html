@@ -10,6 +10,18 @@
       --left-offset: 9cm; /* margen izquierdo solicitado */
     }
 
+    /* Franja izquierda del tamaño de --left-offset, con el mismo color/gradiente del header */
+    .left-strip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--left-offset);
+      height: 100vh;
+      background: linear-gradient(135deg,#2563eb,#1e40af); /* mismo fondo del header */
+      z-index: 0;
+      pointer-events: none; /* no interfiere con interacción */
+    }
+
     /* Contenedor que rota la página -90deg (270°) */
     .portrait-wrap {
       position: absolute;
@@ -21,6 +33,7 @@
       width: 100vh;   /* intercambia ancho/alto para portrait */
       height: 100vw;
       overflow: hidden;
+      z-index: 1; /* por encima de la franja izquierda */
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -47,7 +60,7 @@
       justify-content:center;
     }
     h1{
-      font-size:7rem; /* aumento aplicado anteriormente */
+      font-size:7rem;
       font-weight:900;
       letter-spacing:-1px;
       line-height:1.1;
@@ -56,7 +69,7 @@
       text-shadow:0 2px 12px #111a;
     }
     .telefono {
-      font-size:5rem; /* aumento aplicado anteriormente */
+      font-size:5rem;
       margin-top:1.5rem;
       font-weight:700;
       letter-spacing:2px;
@@ -69,7 +82,7 @@
       text-align:center;
       font-weight:700;
       padding: 2.5rem 1.2rem;
-      font-size: 5rem; /* aumento aplicado anteriormente */
+      font-size: 5rem;
       letter-spacing:2px;
       margin-bottom:1.5rem;
       border-radius: 8px;
@@ -182,10 +195,16 @@
         font-size:9vw;
         margin-top:2vw;
       }
+      /* En pantallas pequeñas, aseguramos que la franja no ocupe más del 30% del ancho */
+      .left-strip { max-width: 30vw; }
+      .portrait-wrap { left: calc(50% + min(var(--left-offset), 30vw)); }
     }
   </style>
 </head>
 <body>
+  <!-- Franja azul a la izquierda del tamaño solicitado -->
+  <div class="left-strip" aria-hidden="true"></div>
+
   <!-- Envolvemos TODO en .portrait-wrap para rotarlo -->
   <div class="portrait-wrap">
     <header>
