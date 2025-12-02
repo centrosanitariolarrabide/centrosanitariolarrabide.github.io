@@ -18,7 +18,7 @@
       left: 0;
       width: var(--left-offset);
       height: 100vh;
-      background: var(--brand-blue); /* ahora es el mismo azul del rótulo */
+      background: var(--brand-blue); /* mismo azul del rótulo */
       z-index: 0;
       pointer-events: none; /* no interfiere con interacción */
     }
@@ -261,6 +261,7 @@
     const loading = document.getElementById('loading');
     let current = 0;
     let intervalId;
+
     function getBasePath(){
       const path = location.pathname;
       if(path.endsWith('/')) return path;
@@ -334,17 +335,37 @@
     });
     carousel.addEventListener('mouseenter', stopAutoplay);
     carousel.addEventListener('mouseleave', startAutoplay);
+
+    // Creamos un overlay que cubra TODA la ventana y esté por encima de todo el contenido.
     const overlay = document.createElement('div');
     overlay.style.position = 'fixed';
     overlay.style.inset = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
     overlay.style.background = 'black';
     overlay.style.opacity = '0';
-    overlay.style.pointerEvents = 'none';
-    overlay.style.transition = 'opacity 2s';
+    overlay.style.pointerEvents = 'none'; // no bloquea interacción
+    overlay.style.transition = 'opacity 2s ease';
+    overlay.style.zIndex = '99999'; // por encima de todo
     document.body.appendChild(overlay);
-    function fadeCycle(){ overlay.style.opacity = '1'; setTimeout(()=> overlay.style.opacity = '0', 3000); }
-    setInterval(fadeCycle, 5 * 60 * 1000);
+
+    // Hacemos un fundido a negro cada 2 minutos (120000ms).
+    // El overlay sube a opacity 1 (fundido a negro), esperamos 3s y vuelve a 0.
+    function fadeCycle(){
+      overlay.style.opacity = '1';
+      // Si fuera necesario evitar interacción temporalmente, podríamos habilitar pointer-events aquí.
+      setTimeout(()=> {
+        overlay.style.opacity = '0';
+      }, 3000); // duración del "negro" visible antes de volver a transparente
+    }
+
+    // Intervalo cada 2 minutos
+    const fadeIntervalMs = 2 * 60 * 1000;
+    setInterval(fadeCycle, fadeIntervalMs);
+
+    // Primera vez después de 10s para que se vea en el primer ciclo si quieres
     setTimeout(fadeCycle, 10000);
+
   </script>
 </body>
 </html>
