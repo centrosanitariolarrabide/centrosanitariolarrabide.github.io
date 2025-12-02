@@ -8,16 +8,17 @@
     /* Variable para controlar el margen izquierdo (fácil de ajustar) */
     :root {
       --left-offset: 9cm; /* margen izquierdo solicitado */
+      --brand-blue: #2563eb; /* color principal del rótulo (match del header) */
     }
 
-    /* Franja izquierda del tamaño de --left-offset, con el mismo color/gradiente del header */
+    /* Franja izquierda del tamaño de --left-offset, con el mismo azul del rótulo */
     .left-strip {
       position: fixed;
       top: 0;
       left: 0;
       width: var(--left-offset);
       height: 100vh;
-      background: linear-gradient(135deg,#2563eb,#1e40af); /* mismo fondo del header */
+      background: var(--brand-blue); /* ahora es el mismo azul del rótulo */
       z-index: 0;
       pointer-events: none; /* no interfiere con interacción */
     }
