@@ -18,6 +18,10 @@
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
+    /* Aumentamos el tamaño base de fuente para escalar rems */
+    html{
+      font-size: 18px; /* aumentado desde 16px para agrandar fuentes rem-based */
+    }
     html,body{
       height:100%;
       font-family:Segoe UI,Roboto,Arial,sans-serif;
@@ -125,16 +129,17 @@
         padding-top: 8vw;
         padding-bottom: 8vw;
       }
+      /* Aumentos específicos para portrait (vw) para que se vean más grandes en pantalla vertical */
       h1 {
-        font-size:10vw;
+        font-size:12vw; /* antes 10vw */
         margin-bottom:5vw;
       }
       .telefono {
-        font-size:7vw;
+        font-size:9vw; /* antes 7vw */
         margin-top:4vw;
       }
       .price-banner {
-        font-size:9vw;
+        font-size:11vw; /* antes 9vw */
         padding: 5vw 2vw;
         margin-bottom: 6vw;
       }
@@ -156,20 +161,20 @@
       .info-extra {
         margin-top:7vw;
         padding:7vw 2vw;
-        font-size:7vw;
+        font-size:8vw; /* antes 7vw */
         gap:7vw;
       }
       .info-extra h2 {
-        font-size:8vw;
+        font-size:9vw; /* antes 8vw */
       }
       .qr-contacto img {
-        width:32vw;
-        height:32vw;
+        width:36vw;  /* antes 32vw */
+        height:36vw; /* antes 32vw */
         max-width:45vw;
         max-height:45vw;
       }
       .qr-contacto span {
-        font-size:7vw;
+        font-size:8vw; /* antes 7vw */
         margin-top:2vw;
       }
     }
