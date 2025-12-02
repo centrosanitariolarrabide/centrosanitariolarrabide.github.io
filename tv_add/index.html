@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Alquiler Consulta Sanitaria - TV Display</title>
   <style>
+    /* Variable para controlar el margen izquierdo (fácil de ajustar) */
+    :root {
+      --left-offset: 9cm; /* margen izquierdo solicitado */
+    }
+
     /* Contenedor que rota la página -90deg (270°) */
     .portrait-wrap {
       position: absolute;
-      left: 50%;
-      top: 50%; /* margin superior eliminado: volvemos al centro exacto */
+      /* desplazamos el centro horizontal hacia la derecha por --left-offset para crear "margen izquierdo" */
+      left: calc(50% + var(--left-offset));
+      top: 50%;
       transform: translate(-50%, -50%) rotate(-90deg); /* 270° */
       transform-origin: center center;
       width: 100vh;   /* intercambia ancho/alto para portrait */
