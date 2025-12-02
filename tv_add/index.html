@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Alquiler Consulta Sanitaria - TV Display</title>
   <style>
+    /* variable para controlar el offset superior (fácil de ajustar) */
+    :root {
+      --top-offset: 9cm; /* ajustado a 9 cm según lo solicitado */
+    }
+
     /* Contenedor que rota la página -90deg (270°) */
     .portrait-wrap {
       position: absolute;
       left: 50%;
-      top: 50%;
+      /* desplazamos hacia abajo el centro por --top-offset para crear "margen superior" */
+      top: calc(50% + var(--top-offset));
       transform: translate(-50%, -50%) rotate(-90deg); /* 270° */
       transform-origin: center center;
       width: 100vh;   /* intercambia ancho/alto para portrait */
