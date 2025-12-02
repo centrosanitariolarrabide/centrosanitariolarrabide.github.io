@@ -5,17 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Alquiler Consulta Sanitaria - TV Display</title>
   <style>
-    /* variable para controlar el offset superior (fácil de ajustar) */
-    :root {
-      --top-offset: 9cm; /* ajustado a 9 cm según lo solicitado */
-    }
-
     /* Contenedor que rota la página -90deg (270°) */
     .portrait-wrap {
       position: absolute;
       left: 50%;
-      /* desplazamos hacia abajo el centro por --top-offset para crear "margen superior" */
-      top: calc(50% + var(--top-offset));
+      top: 50%; /* margin superior eliminado: volvemos al centro exacto */
       transform: translate(-50%, -50%) rotate(-90deg); /* 270° */
       transform-origin: center center;
       width: 100vh;   /* intercambia ancho/alto para portrait */
@@ -26,7 +20,7 @@
     *{box-sizing:border-box;margin:0;padding:0}
     /* Aumentamos el tamaño base de fuente para escalar rems */
     html{
-      font-size: 18px; /* aumentado desde 16px para agrandar fuentes rem-based */
+      font-size: 20px; /* mantenido con el aumento previo */
     }
     html,body{
       height:100%;
@@ -47,7 +41,7 @@
       justify-content:center;
     }
     h1{
-      font-size:6rem;
+      font-size:7rem; /* aumento aplicado anteriormente */
       font-weight:900;
       letter-spacing:-1px;
       line-height:1.1;
@@ -56,7 +50,7 @@
       text-shadow:0 2px 12px #111a;
     }
     .telefono {
-      font-size:4rem;
+      font-size:5rem; /* aumento aplicado anteriormente */
       margin-top:1.5rem;
       font-weight:700;
       letter-spacing:2px;
@@ -69,7 +63,7 @@
       text-align:center;
       font-weight:700;
       padding: 2.5rem 1.2rem;
-      font-size: 4rem;
+      font-size: 5rem; /* aumento aplicado anteriormente */
       letter-spacing:2px;
       margin-bottom:1.5rem;
       border-radius: 8px;
@@ -82,9 +76,9 @@
     .carousel-slide.active{opacity:1}
     .carousel-slide img{width:100%;height:100%;object-fit:cover;display:block}
     .carousel-controls{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:12px;z-index:20}
-    .carousel-dot{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.35);border:2px solid rgba(0,0,0,0.2);cursor:pointer}
+    .carousel-dot{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.35);border:2px solid rgba(0,0,0,0.2);cursor:pointer}
     .carousel-dot.active{background:#fff;transform:scale(1.3);box-shadow:0 0 12px rgba(255,255,255,0.9)}
-    .loading{display:flex;align-items:center;justify-content:center;color:#ddd;font-size:1.5rem;height:100%}
+    .loading{display:flex;align-items:center;justify-content:center;color:#ddd;font-size:1.6rem;height:100%}
 
     .info-extra {
       background: #111c;
@@ -95,13 +89,13 @@
       display: flex;
       flex-direction: column;
       gap: 3rem;
-      font-size: 3.3rem;
+      font-size: 4rem;
       text-align: center;
       align-items: center;
       justify-content: center;
     }
     .info-extra h2 {
-      font-size: 4rem;
+      font-size: 5rem;
       font-weight: 700;
       margin-bottom: 1.2rem;
       color: #3b82f6;
@@ -110,20 +104,20 @@
       list-style: none; padding-left: 0;
     }
     .info-extra li {
-      font-size: 3rem;
+      font-size: 3.5rem;
       margin: 0.5rem 0;
     }
     .qr-contacto img {
       margin-bottom: .8rem;
       border-radius: 6px;
       box-shadow: 0 0 12px #2226;
-      width: 220px;
-      height: 220px;
-      max-width: 45vw;
-      max-height: 45vw;
+      width: 260px;
+      height: 260px;
+      max-width: 48vw;
+      max-height: 48vw;
     }
     .qr-contacto span {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: bold;
       display: block;
       margin-top: 1.2rem;
@@ -135,17 +129,16 @@
         padding-top: 8vw;
         padding-bottom: 8vw;
       }
-      /* Aumentos específicos para portrait (vw) para que se vean más grandes en pantalla vertical */
       h1 {
-        font-size:12vw; /* antes 10vw */
+        font-size:13vw;
         margin-bottom:5vw;
       }
       .telefono {
-        font-size:9vw; /* antes 7vw */
+        font-size:10vw;
         margin-top:4vw;
       }
       .price-banner {
-        font-size:11vw; /* antes 9vw */
+        font-size:13vw;
         padding: 5vw 2vw;
         margin-bottom: 6vw;
       }
@@ -167,20 +160,20 @@
       .info-extra {
         margin-top:7vw;
         padding:7vw 2vw;
-        font-size:8vw; /* antes 7vw */
+        font-size:9vw;
         gap:7vw;
       }
       .info-extra h2 {
-        font-size:9vw; /* antes 8vw */
+        font-size:10vw;
       }
       .qr-contacto img {
-        width:36vw;  /* antes 32vw */
-        height:36vw; /* antes 32vw */
+        width:40vw;
+        height:40vw;
         max-width:45vw;
         max-height:45vw;
       }
       .qr-contacto span {
-        font-size:8vw; /* antes 7vw */
+        font-size:9vw;
         margin-top:2vw;
       }
     }
