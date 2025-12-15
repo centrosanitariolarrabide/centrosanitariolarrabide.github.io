@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alternar Páginas</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000; /* Fondo negro */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh; /* Pantalla completa */
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    iframe {
+      width: 100%; /* Ocupar todo el ancho disponible */
+      height: 100%; /* Ocupar toda la altura disponible */
+      border: none; /* Sin bordes visibles */
+    }
+  </style>
+</head>
+<body>
+  <!-- Aquí cargamos las páginas en un iframe -->
+  <iframe id="pageFrame" src="https://centrosanitariolarrabide.github.io/DESPACHOS/despachos.html"></iframe>
+
+  <script>
+    // URLs de las páginas que queremos alternar
+    const pages = [
+      "https://centrosanitariolarrabide.github.io/DESPACHOS/despachos.html", // Página 1: Despachos
+      "https://centrosanitariolarrabide.github.io/DESPACHOS/anuncio.html"   // Página 2: Anuncio
+    ];
+    let currentIndex = 0;
+
+    // Alternar entre páginas cada 10 segundos
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % pages.length; // Cambia el índice de la página
+      document.getElementById("pageFrame").src = pages[currentIndex]; // Actualiza el iframe con la nueva URL
+    }, 10000); // Cambiar cada 10 segundos (10000 ms)
+  </script>
+</body>
+</html>
