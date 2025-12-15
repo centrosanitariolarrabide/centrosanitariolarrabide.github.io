@@ -17,21 +17,16 @@
       color: var(--white);
       font-family: Arial, Helvetica, sans-serif;
       margin: 0;
-      padding: 0;
-
-      /* Añadido para rotar la web 270 grados */
-      transform: rotate(-90deg);
-      transform-origin: center; /* Punto de origen: centro */
-      height: 100vh;
-      width: 100vw;
+      padding: 20px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     h1 {
       text-align: center;
-      font-size: 5.5rem; /* TÍTULO MUY GRANDE */
+      font-size: 5.5rem; /* TÍTULO */
       margin: 40px 0; /* Más separación del título */
     }
 
@@ -42,29 +37,33 @@
       align-content: center;
       gap: 25px; /* Más espaciado entre fichas */
       padding: 20px;
+
+      /* Rotar solo las tarjetas */
+      transform: rotate(-90deg);
+      transform-origin: center; /* Controla el centro de rotación */
     }
 
     .card {
       background-color: var(--white);
       color: var(--text-dark);
       border-radius: 15px;
-      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más notable */
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Sombra notable */
       padding: 40px; /* Más espacio interno */
-      width: 90%; /* Anchura amplia para ocupar más espacio */
+      width: 90%; /* Anchura amplia */
       max-width: 800px; /* Amplía el tamaño máximo */
+      margin: 0 auto; /* Asegura que esté centrado */
       box-sizing: border-box;
-      margin: 0 auto; /* Asegurar que estén centradas */
     }
 
     .card .room-number {
       background-color: var(--highlight-blue);
       color: var(--white);
-      font-size: 3.5rem; /* Número enorme */
+      font-size: 3.5rem; /* Número grande */
       font-weight: bold;
       padding: 20px;
       text-align: center;
       border-radius: 50%; /* Efecto circular */
-      margin: 0 auto 30px auto; /* Centrar número y separar del texto */
+      margin: 0 auto 30px auto; /* Centra número y separa del texto */
       width: 120px;
       height: 120px;
       display: flex;
@@ -74,7 +73,7 @@
 
     .card p {
       margin: 15px 0;
-      font-size: 2.5rem; /* Texto más grande para lectura fácil */
+      font-size: 2.5rem; /* Texto más grande */
       line-height: 3rem; /* Más espacio entre líneas */
       font-weight: bold;
       text-align: center; /* Centrar texto para mayor legibilidad */
@@ -163,4 +162,3 @@
   </script>
 </body>
 </html>
-
