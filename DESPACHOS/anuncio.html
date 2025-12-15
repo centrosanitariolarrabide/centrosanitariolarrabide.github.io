@@ -359,9 +359,8 @@
       }, 3000); // duración del "negro" visible antes de volver a transparente
     }
 
-    // Intervalo cada 2 minutos
-    const fadeIntervalMs = 2 * 60 * 1000;
-    setInterval(fadeCycle, fadeIntervalMs);
+    const fadeIntervalMs = 4 * 60 * 1000;
+setInterval(fadeCycle, fadeIntervalMs);
 
     // Primera vez después de 10s para que se vea en el primer ciclo si quieres
     setTimeout(fadeCycle, 10000);
