@@ -8,17 +8,18 @@
   body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #f4f4f4;
+    background: #ffffff;
     color: #333;
     text-align: center;
     overflow: hidden;
   }
 
   h1 {
-    background: #2c3e50;
+    background: #ff6600; /* color de tu anuncio, cambia según tu diseño */
     color: white;
     padding: 20px;
     margin: 0;
+    font-size: 2em;
   }
 
   .container, #anuncio {
@@ -35,7 +36,7 @@
   .column {
     flex: 1;
     min-width: 300px;
-    background: white;
+    background: #f4f4f4;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
@@ -44,9 +45,11 @@
   #anuncio {
     flex-direction: column;
     font-size: 2em;
-    background: #2980b9;
+    background: #ff6600; /* color de fondo del anuncio */
     color: white;
     width: 100%;
+    justify-content: center;
+    align-items: center;
   }
 
   .hidden {
@@ -58,7 +61,7 @@
   }
 
   a {
-    color: #fff;
+    color: #2980b9;
     text-decoration: underline;
   }
 
@@ -68,13 +71,11 @@
 
 <h1>CENTRO SANITARIO LARRABIDE</h1>
 
-<!-- Contenedor de anuncio -->
 <div id="anuncio">
   <p>Bienvenidos al Centro Sanitario Larrabide</p>
   <p>Servicios de salud y atención profesional a su disposición</p>
 </div>
 
-<!-- Contenedor de columnas profesionales -->
 <div id="columns" class="container hidden">
   <div id="col1" class="column"></div>
   <div id="col2" class="column"></div>
@@ -92,14 +93,15 @@ const dias = {
   "SABADO": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1052447720&single=true&output=csv"
 };
 
-// Convert CSV a array de objetos
+// Función para parsear CSV con ; o ,
 function parseCSV(text) {
   const lines = text.trim().split("\n");
-  const headers = lines.shift().split(",");
+  const sep = lines[0].includes(";") ? ";" : ",";
+  const headers = lines.shift().split(sep).map(h => h.trim());
   return lines.map(line => {
-    const data = line.split(",");
+    const data = line.split(sep).map(d => d.trim());
     const obj = {};
-    headers.forEach((h,i) => obj[h.trim()] = data[i] ? data[i].trim() : "");
+    headers.forEach((h,i) => obj[h] = data[i] || "");
     return obj;
   });
 }
@@ -125,9 +127,15 @@ function render(data) {
 
 // Cargar CSV de un día
 async function loadDia(url) {
-  const res = await fetch(url);
-  const text = await res.text();
-  return parseCSV(text);
+  try {
+    const res = await fetch(url);
+    const text = await res.text();
+    console.log("CSV cargado correctamente");
+    return parseCSV(text);
+  } catch(e) {
+    console.error("Error al cargar CSV", e);
+    return [];
+  }
 }
 
 // Detectar día actual
@@ -137,7 +145,7 @@ function obtenerDiaActual() {
   return diasSemana[hoy];
 }
 
-// Control de ciclo anuncio/profesionales
+// Ciclo Anuncio / Profesionales
 let showAnuncio = true;
 
 async function ciclo() {
@@ -145,7 +153,6 @@ async function ciclo() {
   const columns = document.getElementById("columns");
 
   if(showAnuncio){
-    // Mostrar anuncio
     anuncio.classList.remove("hidden");
     columns.classList.add("hidden");
     setTimeout(() => {
@@ -153,13 +160,11 @@ async function ciclo() {
       ciclo();
     }, 20000); // 20s anuncio
   } else {
-    // Mostrar profesionales según día actual
     const dia = obtenerDiaActual();
     const data = await loadDia(dias[dia]);
     render(data);
     anuncio.classList.add("hidden");
     columns.classList.remove("hidden");
-
     setTimeout(() => {
       showAnuncio = true;
       ciclo();
@@ -169,3 +174,7 @@ async function ciclo() {
 
 // Inicia ciclo
 ciclo();
+</script>
+
+</body>
+</html>
