@@ -43,7 +43,9 @@
     <h1>Horarios de Hoy</h1>
   </header>
   <main>
+    <!-- Aquí se muestra automáticamente el día de la semana -->
     <h2 id="dayName"></h2>
+    <!-- Contenedor para el contenido del horario -->
     <iframe id="scheduleFrame" src=""></iframe>
   </main>
   <script>
@@ -63,17 +65,17 @@
       'domingo',
       'lunes',
       'martes',
-      'miercoles',
+      'miércoles',
       'jueves',
       'viernes',
-      'sabado'
+      'sábado'
     ];
 
     // Obtener el día actual y mostrar el horario correspondiente
     function loadTodaySchedule() {
       const today = new Date().getDay(); // 0 para domingo, 1 para lunes, etc.
       const dayName = daysInSpanish[today]; // Nombre del día en español
-      const scheduleUrl = schedules[dayName]; // Obtener URL correspondiente
+      const scheduleUrl = schedules[dayName.toLowerCase()]; // Obtener URL correspondiente al día
 
       // Mostrar el nombre del día
       document.getElementById('dayName').textContent = `Horario del ${dayName.charAt(0).toUpperCase() + dayName.slice(1)}`;
@@ -83,7 +85,7 @@
       frame.src = scheduleUrl;
     }
 
-    // Cargar al inicio
+    // Cargar contenido al inicio
     loadTodaySchedule();
   </script>
 </body>
