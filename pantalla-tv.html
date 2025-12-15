@@ -1,180 +1,476 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Centro Sanitario Larrabide</title>
-<style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #ffffff;
-    color: #333;
-    text-align: center;
-    overflow: hidden;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro Sanitario Larrabide - Display TV</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+        }
 
-  h1 {
-    background: #ff6600; /* color de tu anuncio, cambia según tu diseño */
-    color: white;
-    padding: 20px;
-    margin: 0;
-    font-size: 2em;
-  }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-size: 20px;
+        }
 
-  .container, #anuncio {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
-    min-height: calc(100vh - 80px);
-    transition: opacity 1s ease-in-out;
-  }
+        body {
+            font-family: 'Arial', sans-serif;
+        }
 
-  .column {
-    flex: 1;
-    min-width: 300px;
-    background: #f4f4f4;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
+        #root {
+            position: fixed;
+            width: 100vh;
+            height: 100vw;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(270deg);
+            transform-origin: center center;
+            overflow: auto;
+        }
 
-  #anuncio {
-    flex-direction: column;
-    font-size: 2em;
-    background: #ff6600; /* color de fondo del anuncio */
-    color: white;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-  }
+        .fade-transition {
+            animation: fadeIn 1s ease-in-out;
+        }
 
-  .hidden {
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-  a {
-    color: #2980b9;
-    text-decoration: underline;
-  }
+        /* Estilos del anuncio */
+        .anuncio-header {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: #fff;
+            padding: 2vh 2vw 1.5vh 2vw;
+            text-align: center;
+        }
 
-</style>
+        .anuncio-title {
+            font-size: 6vh;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin-bottom: 1vh;
+            text-shadow: 0 2px 12px rgba(17, 17, 17, 0.67);
+        }
+
+        .anuncio-telefono {
+            font-size: 4vh;
+            margin-top: 1vh;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 2px 12px rgba(34, 34, 34, 0.67);
+        }
+
+        .price-banner {
+            background: #3b82f6;
+            color: #fff;
+            text-align: center;
+            font-weight: 700;
+            padding: 2vh 2vw;
+            font-size: 4vh;
+            letter-spacing: 2px;
+            margin-bottom: 2vh;
+            border-radius: 8px;
+            box-shadow: 0 2px 24px rgba(17, 17, 17, 0.4);
+        }
+
+        .carousel-container {
+            width: 100%;
+            height: 50vh;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            bottom: 2vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1vw;
+            z-index: 20;
+        }
+
+        .carousel-dot {
+            width: 1.5vh;
+            height: 1.5vh;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background: #fff;
+            transform: scale(1.3);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+        }
+
+        .info-extra {
+            background: rgba(17, 17, 17, 0.8);
+            border-radius: 8px;
+            margin-top: 2vh;
+            padding: 2vh 2vw;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+            font-size: 2.5vh;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-extra h2 {
+            font-size: 4vh;
+            font-weight: 700;
+            margin-bottom: 1vh;
+            color: #3b82f6;
+        }
+
+        .info-extra p {
+            font-size: 2.8vh;
+            margin: 0.5vh 0;
+            line-height: 1.3;
+        }
+    </style>
 </head>
 <body>
+    <div id="root"></div>
 
-<h1>CENTRO SANITARIO LARRABIDE</h1>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-<div id="anuncio">
-  <p>Bienvenidos al Centro Sanitario Larrabide</p>
-  <p>Servicios de salud y atención profesional a su disposición</p>
-</div>
+        const DisplayTV = () => {
+            const GOOGLE_SHEETS_URLS = {
+                0: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=171121620&single=true&output=csv', // Domingo
+                1: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv', // Lunes
+                2: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1617258781&single=true&output=csv', // Martes
+                3: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=81958565&single=true&output=csv', // Miércoles
+                4: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1770303449&single=true&output=csv', // Jueves
+                5: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=953156936&single=true&output=csv', // Viernes
+                6: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1052447720&single=true&output=csv' // Sábado
+            };
 
-<div id="columns" class="container hidden">
-  <div id="col1" class="column"></div>
-  <div id="col2" class="column"></div>
-</div>
+            const PROXY_URL = 'https://corsproxy.io/?';
 
-<script>
-// CSV URLs por día
-const dias = {
-  "DOMINGO": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=171121620&single=true&output=csv",
-  "LUNES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv",
-  "MARTES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1617258781&single=true&output=csv",
-  "MIERCOLES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=81958565&single=true&output=csv",
-  "JUEVES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1770303449&single=true&output=csv",
-  "VIERNES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=953156936&single=true&output=csv",
-  "SABADO": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1052447720&single=true&output=csv"
-};
+            // Obtener el día de la semana actual (0=Domingo, 1=Lunes, ..., 6=Sábado)
+            const getDayOfWeek = () => {
+                return new Date().getDay();
+            };
 
-// Función para parsear CSV con ; o ,
-function parseCSV(text) {
-  const lines = text.trim().split("\n");
-  const sep = lines[0].includes(";") ? ";" : ",";
-  const headers = lines.shift().split(sep).map(h => h.trim());
-  return lines.map(line => {
-    const data = line.split(sep).map(d => d.trim());
-    const obj = {};
-    headers.forEach((h,i) => obj[h] = data[i] || "");
-    return obj;
-  });
-}
+            // Obtener la URL correspondiente al día actual
+            const getCurrentDayURL = () => {
+                const day = getDayOfWeek();
+                const sheetURL = GOOGLE_SHEETS_URLS[day];
+                return PROXY_URL + encodeURIComponent(sheetURL);
+            };
 
-// Render columnas
-function render(data) {
-  const col1 = document.getElementById("col1");
-  const col2 = document.getElementById("col2");
-  col1.innerHTML = "";
-  col2.innerHTML = "";
-  const mitad = Math.ceil(data.length / 2);
-  data.forEach((item, idx) => {
-    const html = `<h3>Despacho ${item.numeroDespacho}</h3>
-                  <p><strong>${item.especialidad}</strong></p>
-                  <p>${item.nombre}</p>
-                  <p>${item.servicios}</p>
-                  <p><a href="${item.web}" target="_blank">${item.web}</a></p>
-                  <p>${item.telefono}</p>`;
-    if (idx < mitad) col1.innerHTML += html;
-    else col2.innerHTML += html;
-  });
-}
+            const [profesionales, setProfesionales] = useState([]);
+            const [showAnuncio, setShowAnuncio] = useState(false);
+            const [currentSlide, setCurrentSlide] = useState(0);
 
-// Cargar CSV de un día
-async function loadDia(url) {
-  try {
-    const res = await fetch(url);
-    const text = await res.text();
-    console.log("CSV cargado correctamente");
-    return parseCSV(text);
-  } catch(e) {
-    console.error("Error al cargar CSV", e);
-    return [];
-  }
-}
+            const images = [
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta2.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta3.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta4.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta5.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta6.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta7.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta8.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta9.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta10.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta11.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta12.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/consulta13.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/detalle.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/detallecamilla.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/pasillo.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/pasillo2.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/pasillo3.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/pasillo4.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/salaespera2.jpeg",
+                "https://centrosanitariolarrabide.github.io/tv_add/salaespera3.jpeg"
+            ];
 
-// Detectar día actual
-function obtenerDiaActual() {
-  const diasSemana = ["DOMINGO","LUNES","MARTES","MIERCOLES","JUEVES","VIERNES","SABADO"];
-  const hoy = new Date().getDay();
-  return diasSemana[hoy];
-}
+            const parseCSV = (csv) => {
+                const lines = csv.trim().split('\n');
+                if (lines.length < 2) return [];
 
-// Ciclo Anuncio / Profesionales
-let showAnuncio = true;
+                const headers = [];
+                const headerLine = lines[0];
+                let currentHeader = '';
+                let inQuotes = false;
 
-async function ciclo() {
-  const anuncio = document.getElementById("anuncio");
-  const columns = document.getElementById("columns");
+                for (let i = 0; i < headerLine.length; i++) {
+                    const char = headerLine[i];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        headers.push(currentHeader.trim().replace(/"/g, ''));
+                        currentHeader = '';
+                    } else {
+                        currentHeader += char;
+                    }
+                }
+                headers.push(currentHeader.trim().replace(/"/g, ''));
 
-  if(showAnuncio){
-    anuncio.classList.remove("hidden");
-    columns.classList.add("hidden");
-    setTimeout(() => {
-      showAnuncio = false;
-      ciclo();
-    }, 20000); // 20s anuncio
-  } else {
-    const dia = obtenerDiaActual();
-    const data = await loadDia(dias[dia]);
-    render(data);
-    anuncio.classList.add("hidden");
-    columns.classList.remove("hidden");
-    setTimeout(() => {
-      showAnuncio = true;
-      ciclo();
-    }, 30000); // 30s profesionales
-  }
-}
+                const data = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
 
-// Inicia ciclo
-ciclo();
-</script>
+                    const values = [];
+                    let currentValue = '';
+                    inQuotes = false;
 
+                    for (let j = 0; j < line.length; j++) {
+                        const char = line[j];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            values.push(currentValue.trim().replace(/"/g, ''));
+                            currentValue = '';
+                        } else {
+                            currentValue += char;
+                        }
+                    }
+                    values.push(currentValue.trim().replace(/"/g, ''));
+
+                    const obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = values[index] || '';
+                    });
+
+                    if (obj.numeroDespacho && obj.nombre) {
+                        data.push(obj);
+                    }
+                }
+
+                return data;
+            };
+
+            const loadProfesionales = async () => {
+                try {
+                    const currentURL = getCurrentDayURL();
+                    console.log('Cargando día:', ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'][getDayOfWeek()]);
+
+                    const response = await fetch(currentURL);
+                    if (response.ok) {
+                        const csvText = await response.text();
+                        const data = parseCSV(csvText);
+                        const sorted = data.sort((a, b) =>
+                            parseInt(a.numeroDespacho) - parseInt(b.numeroDespacho)
+                        );
+                        setProfesionales(sorted);
+                    }
+                } catch (error) {
+                    console.error('Error cargando datos:', error);
+                }
+            };
+
+            useEffect(() => {
+                loadProfesionales();
+
+                // Recargar cada 5 minutos
+                const interval = setInterval(loadProfesionales, 5 * 60 * 1000);
+
+                // Verificar cambio de día cada minuto y recargar si cambió
+                const dayCheckInterval = setInterval(() => {
+                    const currentDay = getDayOfWeek();
+                    const savedDay = localStorage.getItem('currentDay');
+
+                    if (savedDay !== String(currentDay)) {
+                        console.log('Cambio de día detectado, recargando...');
+                        localStorage.setItem('currentDay', String(currentDay));
+                        loadProfesionales();
+                    }
+                }, 60 * 1000); // Revisar cada minuto
+
+                // Guardar día actual
+                localStorage.setItem('currentDay', String(getDayOfWeek()));
+
+                return () => {
+                    clearInterval(interval);
+                    clearInterval(dayCheckInterval);
+                };
+            }, []);
+
+            // Alternancia entre profesionales (22s) y anuncio (12s)
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setShowAnuncio(prev => !prev);
+                }, showAnuncio ? 12000 : 22000);
+
+                return () => clearInterval(timer);
+            }, [showAnuncio]);
+
+            // Carrusel de imágenes del anuncio
+            useEffect(() => {
+                if (showAnuncio) {
+                    const carouselTimer = setInterval(() => {
+                        setCurrentSlide(prev => (prev + 1) % images.length);
+                    }, 5000);
+                    return () => clearInterval(carouselTimer);
+                }
+            }, [showAnuncio, images.length]);
+
+            if (showAnuncio) {
+                return (
+                    <div className="min-h-screen bg-black fade-transition">
+                        <div style={{paddingTop: '5cm', background: 'linear-gradient(135deg, #2563eb, #1e40af)'}}>
+                            <header className="anuncio-header" style={{paddingTop: 0}}>
+                                <h1 className="anuncio-title">Centro Sanitario Larrabide</h1>
+                                <div className="anuncio-telefono">TEF: 643 85 68 07</div>
+                            </header>
+
+                            <div style={{padding: '1rem'}}>
+                                <div className="price-banner">Alquila tu consulta — desde 180€/mes</div>
+
+                                <div className="carousel-container">
+                                    <div className="carousel">
+                                        {images.map((img, index) => (
+                                            <div
+                                                key={index}
+                                                className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
+                                            >
+                                                <img src={img} alt={`Consulta ${index + 1}`} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="carousel-controls">
+                                        {images.map((_, index) => (
+                                            <span
+                                                key={index}
+                                                className={`carousel-dot ${index === currentSlide ? 'active' : ''}`}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="info-extra">
+                                    <div className="services">
+                                        <h2>Especialidades</h2>
+                                        <p>Espacios versátiles para cualquier especialidad sanitaria.</p>
+                                        <p>Consulta para profesionales de la salud: medicina, terapia, psicología… y más.</p>
+                                    </div>
+                                    <div className="horario">
+                                        <h2>Horario</h2>
+                                        <p>Lunes a viernes: 8:00 - 20:00</p>
+                                        <p>Sábados: 9:00 - 14:00</p>
+                                    </div>
+                                    <div className="direccion">
+                                        <h2>Ubicación</h2>
+                                        <p>Larrabide 3, Pamplona</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen fade-transition" style={{background: 'linear-gradient(135deg, #2563eb, #1e40af)', padding: '2vw'}}>
+                    <div className="mx-auto h-full flex flex-col" style={{maxWidth: '90vw'}}>
+                        <div style={{paddingTop: '5cm'}}>
+                        <div className="text-center" style={{marginBottom: '3vh'}}>
+                            <div className="text-white" style={{paddingTop: '2vh', paddingBottom: '2vh'}}>
+                                <h1 style={{fontSize: '7vh', fontWeight: 'bold', letterSpacing: '0.05em', textTransform: 'uppercase'}}>
+                                    CENTRO SANITARIO LARRABIDE
+                                </h1>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div style={{padding: '2vh 2vw', background: 'transparent'}}>
+                            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2vh'}}>
+                                {profesionales.map((prof, index) => (
+                                    <div
+                                        key={index}
+                                        style={{display: 'flex', alignItems: 'flex-start', gap: '1.5vw', padding: '2vh 1.5vw', background: 'rgba(255, 255, 255, 0.95)', borderRadius: '12px', border: '2px solid #dbeafe'}}>
+                                        <div style={{background: '#2563eb', color: 'white', borderRadius: '12px', width: '8vh', height: '8vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4.5vh', fontWeight: 'bold', flexShrink: 0, boxShadow: '0 4px 6px rgba(0,0,0,0.1)'}}>
+                                            {prof.numeroDespacho}
+                                        </div>
+                                        <div style={{flexGrow: 1, minWidth: 0, overflow: 'hidden'}}>
+                                            <h2 style={{fontSize: '2.8vh', fontWeight: 'bold', color: '#1e3a8a', marginBottom: '0.5vh', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                                                {prof.especialidad}
+                                            </h2>
+                                            <h3 style={{fontSize: '2.3vh', color: '#1f2937', fontWeight: '600', marginBottom: '0.5vh', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                                                {prof.nombre}
+                                            </h3>
+
+                                            {prof.servicios && (
+                                                <p style={{fontSize: '1.8vh', color: '#4b5563', marginBottom: '0.5vh', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
+                                                    {prof.servicios}
+                                                </p>
+                                            )}
+
+                                            <div style={{marginTop: '0.5vh'}}>
+                                                {prof.web && (
+                                                    <p style={{fontSize: '1.8vh', color: '#2563eb', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                                                        {prof.web}
+                                                    </p>
+                                                )}
+                                                {prof.telefono && (
+                                                    <p style={{fontSize: '2.2vh', color: '#1f2937', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                                                        Cita previa Tlf: {prof.telefono}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DisplayTV />, document.getElementById('root'));
+    </script>
 </body>
 </html>
