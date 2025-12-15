@@ -18,69 +18,76 @@
       font-family: Arial, Helvetica, sans-serif;
       margin: 0;
       padding: 0;
+      transform: rotate(270deg);
+      transform-origin: center center;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
     }
 
     h1 {
       text-align: center;
-      font-size: 5.5rem; /* TÍTULO MUY GRANDE */
-      margin: 40px 0; /* Más separación del título */
+      font-size: clamp(2rem, 5vw, 5.5rem);
+      margin: clamp(10px, 2vh, 40px) 0;
+      line-height: 1.2;
     }
 
     .container {
-      display: grid; /* Usamos Grid para centrado perfecto */
-      grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-      justify-content: center; /* Centramos contenido en la pantalla */
+      display: grid;
+      grid-template-columns: repeat(2, minmax(400px, 750px));
+      justify-content: center;
       align-content: center;
-      gap: 25px; /* Más espaciado entre fichas */
-      padding: 20px;
+      gap: clamp(15px, 2vw, 30px);
+      padding: clamp(10px, 2vh, 20px);
+      max-width: 100%;
     }
 
     .card {
       background-color: var(--white);
       color: var(--text-dark);
       border-radius: 15px;
-      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más notable */
-      padding: 40px; /* Más espacio interno */
-      width: 90%; /* Anchura amplia para ocupar más espacio */
-      max-width: 800px; /* Amplía el tamaño máximo */
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+      padding: clamp(20px, 3vw, 40px);
+      width: 100%;
       box-sizing: border-box;
-      margin: 0 auto; /* Asegurar que estén centradas */
     }
 
     .card .room-number {
       background-color: var(--highlight-blue);
       color: var(--white);
-      font-size: 3.5rem; /* Número enorme */
+      font-size: clamp(2rem, 4vw, 3.5rem);
       font-weight: bold;
-      padding: 20px;
+      padding: clamp(10px, 2vw, 20px);
       text-align: center;
-      border-radius: 50%; /* Efecto circular */
-      margin: 0 auto 30px auto; /* Centrar número y separar del texto */
-      width: 120px;
-      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto clamp(15px, 2vh, 30px) auto;
+      width: clamp(80px, 10vw, 120px);
+      height: clamp(80px, 10vw, 120px);
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
     .card p {
-      margin: 15px 0;
-      font-size: 2.5rem; /* Texto más grande para lectura fácil */
-      line-height: 3rem; /* Más espacio entre líneas */
+      margin: clamp(10px, 1.5vh, 15px) 0;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      line-height: clamp(2rem, 3.5vw, 3rem);
       font-weight: bold;
-      text-align: center; /* Centrar texto para mayor legibilidad */
+      text-align: center;
     }
 
     .error {
       color: red;
       text-align: center;
-      font-size: 2.4rem; /* Mensaje de error visible */
-      margin: 40px;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      margin: clamp(20px, 4vh, 40px);
     }
   </style>
 </head>
 <body>
-  <h1>CENTRO SANITARIO LARRABIDE</h1>
+  <h1>CENTRO SANITARIO<br>LARRABIDE</h1>
   <div id="cards-container" class="container"></div>
   <p id="error-message" class="error"></p>
 
@@ -98,7 +105,7 @@
 
     async function loadProfessionals() {
       const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"];
-      const today = days[new Date().getDay() - 1] || "LUNES"; // Detecta día actual
+      const today = days[new Date().getDay() - 1] || "LUNES";
       const url = `${PROXY_URL}${sheetsURLs[today]}`;
 
       try {
@@ -115,9 +122,9 @@
     }
 
     function parseCSV(data) {
-      const rows = data.split("\n").slice(1); // Ignorar encabezados
+      const rows = data.split("\n").slice(1);
       return rows.map(row => {
-        const fields = row.split(","); // Comas para columnas
+        const fields = row.split(",");
         console.log("Procesando fila:", fields);
 
         return {
@@ -133,7 +140,7 @@
 
     function renderCards(professionals) {
       const container = document.getElementById("cards-container");
-      container.innerHTML = ""; // Limpia contenido previo
+      container.innerHTML = "";
       professionals.forEach(prof => {
         const card = document.createElement("div");
         card.className = "card";
