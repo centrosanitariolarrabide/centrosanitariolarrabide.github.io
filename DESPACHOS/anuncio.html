@@ -328,7 +328,7 @@
       dots[current].classList.add('active');
     }
     function nextSlide(){ showSlide(current + 1); }
-    function startAutoplay(){ stopAutoplay(); intervalId = setInterval(nextSlide, 5000); }
+    function startAutoplay(){ stopAutoplay(); intervalId = setInterval(nextSlide, 3000); }
     function stopAutoplay(){ if(intervalId) clearInterval(intervalId); }
     filterExistingImages(images, function(valid, missing){
       buildSlides(valid);
