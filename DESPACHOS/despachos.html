@@ -18,60 +18,44 @@
       font-family: Arial, Helvetica, sans-serif;
       margin: 0;
       padding: 0;
-
-      /* Centrar todo el contenido */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
-      overflow: hidden; /* Evitar scroll innecesario */
     }
 
     h1 {
       text-align: center;
-      font-size: 5.5rem; /* Tamaño del título */
-      margin: 20px 0; /* Mantener separación correcta */
-    }
-
-    .container-wrapper {
-      position: relative;
-      width: 100vh; /* Cambiamos altura porque está rotado */
-      height: 100vw; /* Cambiamos anchura porque está rotado */
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 5.5rem; /* TÍTULO MUY GRANDE */
+      margin: 40px 0; /* Más separación del título */
     }
 
     .container {
-      display: grid; /* Usamos Grid para las tarjetas */
+      display: grid; /* Usamos Grid para centrado perfecto */
       grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+      justify-content: center; /* Centramos contenido en la pantalla */
+      align-content: center;
       gap: 25px; /* Más espaciado entre fichas */
-
-      /* Rotar todo el contenedor de las tarjetas */
-      transform: rotate(-90deg);
+      padding: 20px;
     }
 
     .card {
       background-color: var(--white);
       color: var(--text-dark);
       border-radius: 15px;
-      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Sombra notable */
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más notable */
       padding: 40px; /* Más espacio interno */
-      width: 100%; /* Aseguramos que se adaptan al ancho disponible */
-      max-width: 300px; /* Proporción adecuada de cada tarjeta */
+      width: 90%; /* Anchura amplia para ocupar más espacio */
+      max-width: 800px; /* Amplía el tamaño máximo */
       box-sizing: border-box;
-      text-align: center; /* Centramos contenido */
+      margin: 0 auto; /* Asegurar que estén centradas */
     }
 
     .card .room-number {
       background-color: var(--highlight-blue);
       color: var(--white);
-      font-size: 3.5rem; /* Tamaño del número */
+      font-size: 3.5rem; /* Número enorme */
       font-weight: bold;
       padding: 20px;
+      text-align: center;
       border-radius: 50%; /* Efecto circular */
-      margin: 0 auto 20px auto; /* Centra número y separa del texto */
+      margin: 0 auto 30px auto; /* Centrar número y separar del texto */
       width: 120px;
       height: 120px;
       display: flex;
@@ -80,8 +64,11 @@
     }
 
     .card p {
-      margin: 10px 0; /* Separación entre líneas */
-      font-size: 1.8rem; /* Especificar tamaño del texto */
+      margin: 15px 0;
+      font-size: 2.5rem; /* Texto más grande para lectura fácil */
+      line-height: 3rem; /* Más espacio entre líneas */
+      font-weight: bold;
+      text-align: center; /* Centrar texto para mayor legibilidad */
     }
 
     .error {
@@ -94,9 +81,7 @@
 </head>
 <body>
   <h1>CENTRO SANITARIO LARRABIDE</h1>
-  <div class="container-wrapper">
-    <div id="cards-container" class="container"></div>
-  </div>
+  <div id="cards-container" class="container"></div>
   <p id="error-message" class="error"></p>
 
   <script>
@@ -132,7 +117,9 @@
     function parseCSV(data) {
       const rows = data.split("\n").slice(1); // Ignorar encabezados
       return rows.map(row => {
-        const fields = row.split(",");
+        const fields = row.split(","); // Comas para columnas
+        console.log("Procesando fila:", fields);
+
         return {
           numeroDespacho: fields[0]?.trim() || "N/A",
           especialidad: fields[1]?.trim() || "N/A",
@@ -146,7 +133,7 @@
 
     function renderCards(professionals) {
       const container = document.getElementById("cards-container");
-      container.innerHTML = ""; 
+      container.innerHTML = ""; // Limpia contenido previo
       professionals.forEach(prof => {
         const card = document.createElement("div");
         card.className = "card";
