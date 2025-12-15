@@ -1,111 +1,197 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Centro Sanitario Larrabide - Display TV</title>
-    <!-- Mantiene las mismas dependencias -->
+
+    <!-- React -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        /* Tus estilos originales permanecen */
-        body {
-            font-family: 'Arial', sans-serif;
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-size: 20px;
+        }
+
+        body { font-family: Arial, sans-serif; }
+
+        #root {
+            position: fixed;
+            width: 100vh;
+            height: 100vw;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(270deg);
+            transform-origin: center;
+        }
+
+        .fade-transition {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
+
 <body>
-    <div id="root"></div>
+<div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+<script type="text/babel">
+const { useState, useEffect } = React;
 
-        const DisplayTV = () => {
-            const GOOGLE_SHEETS_URLS = {
-                0: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=171121620&single=true&output=csv',
-                1: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv',
-                2: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1617258781&single=true&output=csv',
-                3: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=81958565&single=true&output=csv',
-                4: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1770303449&single=true&output=csv',
-                5: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=953156936&single=true&output=csv',
-                6: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1052447720&single=true&output=csv',
-            };
+/* =======================
+   CSV PARSER ROBUSTO
+======================= */
+const parseCSV = (csv) => {
+    const lines = csv
+        .replace(/\r/g, '')
+        .trim()
+        .split('\n');
 
-            const PROXY_URL = 'https://corsproxy.io/?';
-            const getDayOfWeek = () => new Date().getDay();
+    if (lines.length < 2) return [];
 
-            const [profesionales, setProfesionales] = useState([]);
-            const [error, setError] = useState("");
+    const normalize = (str) =>
+        str
+            .toLowerCase()
+            .replace(/^\uFEFF/, '') // BOM
+            .trim()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '');
 
-            const getCurrentDayURL = () => {
-                const day = getDayOfWeek();
-                const sheetURL = GOOGLE_SHEETS_URLS[day];
-                return PROXY_URL + encodeURIComponent(sheetURL);
-            };
+    const headers = lines[0].split(',').map(h => normalize(h));
+    const data = [];
 
-            const parseCSV = (csv) => {
-                const lines = csv.trim().split('\n');
-                const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-                return lines.slice(1).map(line => {
-                    const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
-                    return headers.reduce((obj, header, index) => {
-                        obj[header] = values[index] || "";
-                        return obj;
-                    }, {});
-                });
-            };
+    for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
 
-            const loadProfesionales = async () => {
-                const currentURL = getCurrentDayURL();
-                console.log("Cargando URL:", currentURL);
-                try {
-                    const response = await fetch(currentURL);
-                    if (!response.ok) {
-                        throw new Error(`Error ${response.status} - ${response.statusText}`);
-                    }
-                    const csvText = await response.text();
-                    const parsedData = parseCSV(csvText);
-                    setProfesionales(parsedData);
-                    setError(""); // Limpia error si tiene éxito
-                } catch (e) {
-                    console.error("Error cargando datos:", e);
-                    setError("No se pudieron cargar los datos de la hoja de cálculo.");
-                }
-            };
+        const values = lines[i].split(',');
+        const obj = {};
 
-            useEffect(() => {
-                loadProfesionales();
-                const interval = setInterval(loadProfesionales, 5 * 60 * 1000);
-                return () => clearInterval(interval);
-            }, []);
+        headers.forEach((h, idx) => {
+            obj[h] = (values[idx] || '').trim();
+        });
 
-            return (
-                <div>
-                    {error && <p style={{ color: "red" }}>{error}</p>}
-                    {profesionales.length === 0 && !error ? (
-                        <p>Cargando datos...</p>
-                    ) : (
-                        profesionales.map((prof, index) => (
-                            <div key={index} style={{ margin: "10px 0" }}>
-                                <p>
-                                    <strong>Despacho:</strong> {prof.numeroDespacho || "N/A"}
-                                </p>
-                                <p>
-                                    <strong>Nombre:</strong> {prof.nombre || "N/A"}
-                                </p>
-                                <p>
-                                    <strong>Especialidad:</strong> {prof.especialidad || "N/A"}
-                                </p>
-                            </div>
-                        ))
-                    )}
-                </div>
+        if (obj.numerodespacho && obj.nombre) {
+            data.push(obj);
+        }
+    }
+    return data;
+};
+
+/* =======================
+   COMPONENTE PRINCIPAL
+======================= */
+const DisplayTV = () => {
+
+    const GOOGLE_SHEETS_URLS = {
+        0: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=171121620&single=true&output=csv',
+        1: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv',
+        2: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1617258781&single=true&output=csv',
+        3: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=81958565&single=true&output=csv',
+        4: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1770303449&single=true&output=csv',
+        5: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=953156936&single=true&output=csv',
+        6: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1052447720&single=true&output=csv'
+    };
+
+    const PROXY = 'https://api.allorigins.win/raw?url=';
+
+    const getDay = () => new Date().getDay();
+    const getURL = () => PROXY + encodeURIComponent(GOOGLE_SHEETS_URLS[getDay()]);
+
+    const [profesionales, setProfesionales] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const load = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch(getURL());
+            const text = await res.text();
+            const data = parseCSV(text).sort(
+                (a,b) => parseInt(a.numerodespacho) - parseInt(b.numerodespacho)
             );
-        };
+            setProfesionales(data);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        ReactDOM.render(<DisplayTV />, document.getElementById('root'));
-    </script>
+    useEffect(() => {
+        load();
+        const i = setInterval(load, 5 * 60 * 1000);
+        return () => clearInterval(i);
+    }, []);
+
+    if (loading) {
+        return (
+            <div style={{color: 'white', fontSize: '4vh', padding: '4vh'}}>
+                Cargando profesionales…
+            </div>
+        );
+    }
+
+    if (!profesionales.length) {
+        return (
+            <div style={{color: 'white', fontSize: '4vh', padding: '4vh'}}>
+                Hoy no hay consultas programadas
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen fade-transition"
+             style={{background:'linear-gradient(135deg,#2563eb,#1e40af)',padding:'2vw'}}>
+
+            <h1 className="text-white text-center font-bold"
+                style={{fontSize:'6vh', marginBottom:'3vh'}}>
+                CENTRO SANITARIO LARRABIDE
+            </h1>
+
+            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'2vh'}}>
+                {profesionales.map((p,i)=>(
+                    <div key={i}
+                         style={{background:'white',borderRadius:'12px',padding:'2vh'}}>
+                        <div style={{fontSize:'4vh',fontWeight:'bold',color:'#2563eb'}}>
+                            Despacho {p.numerodespacho}
+                        </div>
+                        <div style={{fontSize:'3vh',fontWeight:'bold'}}>
+                            {p.especialidad}
+                        </div>
+                        <div style={{fontSize:'2.5vh'}}>
+                            {p.nombre}
+                        </div>
+                        {p.telefono && (
+                            <div style={{marginTop:'1vh',fontWeight:'bold'}}>
+                                📞 {p.telefono}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+/* =======================
+   ARRANQUE REACT 18
+======================= */
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<DisplayTV />);
+
+</script>
 </body>
 </html>
