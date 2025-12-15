@@ -1,58 +1,171 @@
-<!-- Snippet: ayuda/menú rápido para TV (pégalo tras <div id="root"></div>) -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro Sanitario Larrabide</title>
 <style>
-  .tv-help {
-    position: fixed;
-    left: 50%;
-    top: calc(var(--tv-top-offset, 9cm) + 10px);
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-    padding: 12px 18px;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    z-index: 9999;
-    max-width: 90%;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #333;
+    text-align: center;
+    overflow: hidden;
   }
-  .tv-help p { margin: 0.2rem 0; }
-  .tv-help .muted { opacity: 0.85; font-size: 0.9rem; }
-  .tv-help .close-btn {
-    display:inline-block;margin-left:12px;padding:6px 10px;border-radius:6px;background:#fff;color:#123;border:none;cursor:pointer;font-weight:700;
-  }
-  @media (min-width:1600px) { .tv-help { font-size:1.05rem; } }
-</style>
 
-<div id="tvHelp" class="tv-help" role="dialog" aria-live="polite" aria-labelledby="tvHelpTitle">
-  <strong id="tvHelpTitle">Ayuda rápida</strong>
-  <p class="muted">Flechas ↑/↓ mover contenido • + / - cambiar tamaño texto • ? parámetros: ?offset=8.5cm&scale=1.25</p>
-  <p style="margin-top:6px">Pulsa <button class="close-btn" id="tvHelpClose">OK</button> para ocultar</p>
+  h1 {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    margin: 0;
+  }
+
+  .container, #anuncio {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    min-height: calc(100vh - 80px);
+    transition: opacity 1s ease-in-out;
+  }
+
+  .column {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  #anuncio {
+    flex-direction: column;
+    font-size: 2em;
+    background: #2980b9;
+    color: white;
+    width: 100%;
+  }
+
+  .hidden {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  a {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+</style>
+</head>
+<body>
+
+<h1>CENTRO SANITARIO LARRABIDE</h1>
+
+<!-- Contenedor de anuncio -->
+<div id="anuncio">
+  <p>Bienvenidos al Centro Sanitario Larrabide</p>
+  <p>Servicios de salud y atención profesional a su disposición</p>
+</div>
+
+<!-- Contenedor de columnas profesionales -->
+<div id="columns" class="container hidden">
+  <div id="col1" class="column"></div>
+  <div id="col2" class="column"></div>
 </div>
 
 <script>
-  (function(){
-    const help = document.getElementById('tvHelp');
-    const btn = document.getElementById('tvHelpClose');
-    // Mostrar solo la primera vez en esta sesión (sessionStorage)
-    if (sessionStorage.getItem('tvHelpDismissed')) {
-      help.style.display = 'none';
-    } else {
-      help.style.display = 'block';
-    }
-    function dismiss(){
-      help.style.display = 'none';
-      sessionStorage.setItem('tvHelpDismissed','1');
-    }
-    btn.addEventListener('click', dismiss);
-    // Mismo cierre con tecla M o Escape
-    window.addEventListener('keydown', function(e){
-      if (e.key === 'm' || e.key === 'M' || e.key === 'Escape' || e.key === '?') dismiss();
-    });
-    // Ajustar posición si se cambia la variable CSS (por ejemplo al usar flechas)
-    const ro = new ResizeObserver(()=> {
-      // for simplicity: no-op; the CSS already usa --tv-top-offset
-    });
-    ro.observe(document.documentElement);
-  })();
-</script>
+// CSV URLs por día
+const dias = {
+  "DOMINGO": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=171121620&single=true&output=csv",
+  "LUNES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv",
+  "MARTES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1617258781&single=true&output=csv",
+  "MIERCOLES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=81958565&single=true&output=csv",
+  "JUEVES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1770303449&single=true&output=csv",
+  "VIERNES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=953156936&single=true&output=csv",
+  "SABADO": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1052447720&single=true&output=csv"
+};
 
+// Convert CSV a array de objetos
+function parseCSV(text) {
+  const lines = text.trim().split("\n");
+  const headers = lines.shift().split(",");
+  return lines.map(line => {
+    const data = line.split(",");
+    const obj = {};
+    headers.forEach((h,i) => obj[h.trim()] = data[i] ? data[i].trim() : "");
+    return obj;
+  });
+}
+
+// Render columnas
+function render(data) {
+  const col1 = document.getElementById("col1");
+  const col2 = document.getElementById("col2");
+  col1.innerHTML = "";
+  col2.innerHTML = "";
+  const mitad = Math.ceil(data.length / 2);
+  data.forEach((item, idx) => {
+    const html = `<h3>Despacho ${item.numeroDespacho}</h3>
+                  <p><strong>${item.especialidad}</strong></p>
+                  <p>${item.nombre}</p>
+                  <p>${item.servicios}</p>
+                  <p><a href="${item.web}" target="_blank">${item.web}</a></p>
+                  <p>${item.telefono}</p>`;
+    if (idx < mitad) col1.innerHTML += html;
+    else col2.innerHTML += html;
+  });
+}
+
+// Cargar CSV de un día
+async function loadDia(url) {
+  const res = await fetch(url);
+  const text = await res.text();
+  return parseCSV(text);
+}
+
+// Detectar día actual
+function obtenerDiaActual() {
+  const diasSemana = ["DOMINGO","LUNES","MARTES","MIERCOLES","JUEVES","VIERNES","SABADO"];
+  const hoy = new Date().getDay();
+  return diasSemana[hoy];
+}
+
+// Control de ciclo anuncio/profesionales
+let showAnuncio = true;
+
+async function ciclo() {
+  const anuncio = document.getElementById("anuncio");
+  const columns = document.getElementById("columns");
+
+  if(showAnuncio){
+    // Mostrar anuncio
+    anuncio.classList.remove("hidden");
+    columns.classList.add("hidden");
+    setTimeout(() => {
+      showAnuncio = false;
+      ciclo();
+    }, 20000); // 20s anuncio
+  } else {
+    // Mostrar profesionales según día actual
+    const dia = obtenerDiaActual();
+    const data = await loadDia(dias[dia]);
+    render(data);
+    anuncio.classList.add("hidden");
+    columns.classList.remove("hidden");
+
+    setTimeout(() => {
+      showAnuncio = true;
+      ciclo();
+    }, 30000); // 30s profesionales
+  }
+}
+
+// Inicia ciclo
+ciclo();
