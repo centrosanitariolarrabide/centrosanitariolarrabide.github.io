@@ -1,1 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CENTRO SANITARIO LARRABIDE</title>
+  <style>
+    :root {
+      --brand-blue: #2563eb;
+      --white: #ffffff;
+      --text-dark: #222222;
+      --highlight-blue: #1d4ed8;
+    }
+
+    body {
+      background-color: var(--brand-blue);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 5.5rem; /* TÍTULO MUY GRANDE */
+      margin: 40px 0; /* Más separación del título */
+    }
+
+    .container {
+      display: grid; /* Usamos Grid para centrado perfecto */
+      grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+      justify-content: center; /* Centramos contenido en la pantalla */
+      align-content: center;
+      gap: 25px; /* Más espaciado entre fichas */
+      padding: 20px;
+    }
+
+    .card {
+      background-color: var(--white);
+      color: var(--text-dark);
+      border-radius: 15px;
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más notable */
+      padding: 40px; /* Más espacio interno */
+      width: 90%; /* Anchura amplia para ocupar más espacio */
+      max-width: 800px; /* Amplía el tamaño máximo */
+      box-sizing: border-box;
+      margin: 0 auto; /* Asegurar que estén centradas */
+    }
+
+    .card .room-number {
+      background-color: var(--highlight-blue);
+      color: var(--white);
+      font-size: 3.5rem; /* Número enorme */
+      font-weight: bold;
+      padding: 20px;
+      text-align: center;
+      border-radius: 50%; /* Efecto circular */
+      margin: 0 auto 30px auto; /* Centrar número y separar del texto */
+      width: 120px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card p {
+      margin: 15px 0;
+      font-size: 2.5rem; /* Texto más grande para lectura fácil */
+      line-height: 3rem; /* Más espacio entre líneas */
+      font-weight: bold;
+      text-align: center; /* Centrar texto para mayor legibilidad */
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      font-size: 2.4rem; /* Mensaje de error visible */
+      margin: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h1>CENTRO SANITARIO LARRABIDE</h1>
+  <div id="cards-container" class="container"></div>
+  <p id="error-message" class="error"></p>
+
+  <script>
+    const PROXY_URL = "https://corsproxy.io/?";
+    const sheetsURLs = {
+      "LUNES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv",
+      "MARTES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1617258781&single=true&output=csv",
+      "MIÉRCOLES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=81958565&single=true&output=csv",
+      "JUEVES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1770303449&single=true&output=csv",
+      "VIERNES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=953156936&single=true&output=csv",
+      "SÁBADO": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1052447720&single=true&output=csv",
+      "DOMINGO": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=171121620&single=true&output=csv"
+    };
+
+    async function loadProfessionals() {
+      const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"];
+      const today = days[new Date().getDay() - 1] || "LUNES"; // Detecta día actual
+      const url = `${PROXY_URL}${sheetsURLs[today]}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Error de red (${response.status})`);
+        const fileContent = await response.text();
+        const professionals = parseCSV(fileContent);
+
+        renderCards(professionals);
+      } catch (error) {
+        console.error("Error al cargar:", error);
+        document.getElementById("error-message").innerText = `No se pudieron cargar los datos correctamente.`;
+      }
+    }
+
+    function parseCSV(data) {
+      const rows = data.split("\n").slice(1); // Ignorar encabezados
+      return rows.map(row => {
+        const fields = row.split(","); // Comas para columnas
+        console.log("Procesando fila:", fields);
+
+        return {
+          numeroDespacho: fields[0]?.trim() || "N/A",
+          especialidad: fields[1]?.trim() || "N/A",
+          nombre: fields[2]?.trim() || "N/A",
+          servicios: fields[3]?.trim() || "N/A",
+          web: fields[4]?.trim() || "N/A",
+          telefono: fields[5]?.trim() || "N/A"
+        };
+      });
+    }
+
+    function renderCards(professionals) {
+      const container = document.getElementById("cards-container");
+      container.innerHTML = ""; // Limpia contenido previo
+      professionals.forEach(prof => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div class="room-number">${prof.numeroDespacho}</div>
+          <p>${prof.especialidad}</p>
+          <p>${prof.nombre}</p>
+          <p>${prof.servicios}</p>
+          <p>${prof.web}</p>
+          <p>${prof.telefono}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadProfessionals);
+  </script>
+</body>
+</html>
 
