@@ -18,29 +18,41 @@
       font-family: Arial, Helvetica, sans-serif;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #content-wrapper {
       transform: rotate(270deg);
       transform-origin: center center;
-      width: 100vw;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
+      width: 100vh;
+      height: 100vw;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -50vh;
+      margin-top: -50vw;
+      display: flex;
+      flex-direction: column;
+      padding-top: 4cm;
+      box-sizing: border-box;
     }
 
     h1 {
       text-align: center;
       font-size: clamp(3rem, 6vw, 6rem);
-      margin: clamp(10px, 2vh, 30px) 0;
+      margin: 0 0 1rem 0;
       line-height: 1.2;
+      flex-shrink: 0;
     }
 
     .container {
       display: grid;
-      grid-template-columns: repeat(2, minmax(400px, 700px));
+      grid-template-columns: repeat(2, 500px);
       justify-content: center;
-      align-content: center;
-      gap: clamp(20px, 2.5vw, 35px);
-      padding: clamp(15px, 3vh, 30px);
+      gap: 25px;
+      padding: 0 30px;
       max-width: 100%;
     }
 
@@ -49,33 +61,36 @@
       color: var(--text-dark);
       border-radius: 15px;
       box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-      padding: clamp(25px, 3.5vw, 45px);
-      width: 100%;
+      padding: 30px;
+      width: 500px;
+      height: auto;
       box-sizing: border-box;
     }
 
     .card .room-number {
       background-color: var(--highlight-blue);
       color: var(--white);
-      font-size: clamp(2.5rem, 4.5vw, 4rem);
+      font-size: 3rem;
       font-weight: bold;
-      padding: clamp(12px, 2.5vw, 25px);
+      padding: 15px;
       text-align: center;
       border-radius: 50%;
-      margin: 0 auto clamp(18px, 2.5vh, 35px) auto;
-      width: clamp(100px, 11vw, 150px);
-      height: clamp(100px, 11vw, 150px);
+      margin: 0 auto 25px auto;
+      width: 110px;
+      height: 110px;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
     .card p {
-      margin: clamp(8px, 1.5vh, 15px) 0;
-      font-size: clamp(1.4rem, 2.8vw, 2.4rem);
-      line-height: clamp(1.8rem, 3.2vw, 2.8rem);
+      margin: 10px 0;
+      font-size: 1.8rem;
+      line-height: 2.2rem;
       font-weight: bold;
       text-align: center;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     .error {
@@ -87,9 +102,11 @@
   </style>
 </head>
 <body>
-  <h1>CENTRO SANITARIO LARRABIDE</h1>
-  <div id="cards-container" class="container"></div>
-  <p id="error-message" class="error"></p>
+  <div id="content-wrapper">
+    <h1>CENTRO SANITARIO LARRABIDE</h1>
+    <div id="cards-container" class="container"></div>
+    <p id="error-message" class="error"></p>
+  </div>
 
   <script>
     const PROXY_URL = "https://corsproxy.io/?";
