@@ -70,17 +70,20 @@
     .card .room-number {
       background-color: var(--highlight-blue);
       color: var(--white);
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: bold;
-      padding: 15px;
+      padding: 20px 35px;
       text-align: center;
-      border-radius: 50%;
+      border-radius: 50px;
       margin: 0 auto 25px auto;
-      width: 110px;
-      height: 110px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    
+    .card .room-number-container {
       display: flex;
       justify-content: center;
-      align-items: center;
+      margin-bottom: 25px;
     }
 
     .card p {
@@ -163,7 +166,9 @@
         card.className = "card";
 
         card.innerHTML = `
-          <div class="room-number">${prof.numeroDespacho}</div>
+          <div class="room-number-container">
+            <div class="room-number">${prof.numeroDespacho}</div>
+          </div>
           <p>${prof.especialidad}</p>
           <p>${prof.nombre}</p>
           <p>${prof.servicios}</p>
