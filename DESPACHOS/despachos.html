@@ -126,7 +126,7 @@
     async function loadProfessionals() {
       const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"];
       const today = days[new Date().getDay() - 1] || "LUNES";
-      const url = `${PROXY_URL}${sheetsURLs[today]}`;
+      const url = `${PROXY_URL}${encodeURIComponent(sheetsURLs[today])}`;
 
       try {
         const response = await fetch(url);
