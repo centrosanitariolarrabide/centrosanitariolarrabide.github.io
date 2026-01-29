@@ -112,7 +112,12 @@
   </div>
 
   <script>
-    const PROXY_URL = "https://corsproxy.io/?";
+    // NOTA:
+    // - Intentamos primero la URL directa (sin proxy).
+    // - Si falla (por CORS o red), probamos proxies públicos en orden.
+    // - Proxies usados: AllOrigins, ThingProxy, corsproxy.io (último recurso).
+    // Si quieres usar solo uno, reemplaza fetchWithFallback por fetch(url).
+
     const sheetsURLs = {
       "LUNES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=0&single=true&output=csv",
       "MARTES": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=1617258781&single=true&output=csv",
@@ -123,27 +128,76 @@
       "DOMINGO": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQZQzlS8zkchIdkBhNbEU5TUk3KS3UVeX5K4yUza_BCQeMmFqraBRovGVEyfUZX59A9stCotFo-LhvO/pub?gid=171121620&single=true&output=csv"
     };
 
+    // Construye variantes proxy (devuelven la URL completa a pedir)
+    const proxyGenerators = [
+      // AllOrigins (devuelve el contenido sin CORS bloqueado)
+      (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+      // ThingProxy (proxy simple)
+      (u) => `https://thingproxy.freeboard.io/fetch/${u}`,
+      // Corsproxy.io (como último recurso)
+      (u) => `https://corsproxy.io/?${encodeURIComponent(u)}`
+    ];
+
+    async function fetchWithFallback(url) {
+      // 1) Intentar fetch directo
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          console.info("Fetch directo ok:", url);
+          return res;
+        } else {
+          console.warn("Fetch directo falló con status:", res.status);
+        }
+      } catch (err) {
+        console.warn("Fetch directo falló (posible CORS o red):", err);
+      }
+
+      // 2) Intentar proxies en orden
+      for (const gen of proxyGenerators) {
+        const proxyUrl = gen(url);
+        try {
+          const res = await fetch(proxyUrl);
+          if (res.ok) {
+            console.info("Fetch vía proxy OK:", proxyUrl);
+            return res;
+          } else {
+            console.warn("Proxy devolvió estado no OK:", proxyUrl, res.status);
+          }
+        } catch (err) {
+          console.warn("Error al usar proxy:", proxyUrl, err);
+        }
+      }
+
+      // 3) Si llegamos aquí, fallaron todas las opciones
+      throw new Error("No se pudo obtener el recurso (directo ni proxies disponibles)");
+    }
+
     async function loadProfessionals() {
       const days = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"];
       const today = days[new Date().getDay() - 1] || "LUNES";
-      const url = `${PROXY_URL}${encodeURIComponent(sheetsURLs[today])}`;
+      const targetUrl = sheetsURLs[today];
 
       try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Error de red (${response.status})`);
+        const response = await fetchWithFallback(targetUrl);
         const fileContent = await response.text();
         const professionals = parseCSV(fileContent);
 
         renderCards(professionals);
       } catch (error) {
-        console.error("Error al cargar:", error);
-        document.getElementById("error-message").innerText = `No se pudieron cargar los datos correctamente.`;
+        console.error("Error al cargar datos (directo y proxies):", error);
+        const errEl = document.getElementById("error-message");
+        errEl.innerText = `No se pudieron cargar los datos correctamente. Revisa la consola para más detalles.`;
       }
     }
 
     function parseCSV(data) {
-      const rows = data.split("\n").slice(1);
-      return rows.map(row => {
+      // Asegurarnos de eliminar líneas vacías al final
+      const rows = data.split("\n").filter(r => r.trim() !== "");
+      // asumiendo que la primera fila son encabezados
+      const dataRows = rows.slice(1);
+      return dataRows.map(row => {
+        // Separador simple por comas; si tu CSV usa comillas o comas dentro de campos
+        // habría que usar un parser CSV más robusto.
         const fields = row.split(",");
         console.log("Procesando fila:", fields);
 
